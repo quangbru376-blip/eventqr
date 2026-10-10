@@ -1,0 +1,43 @@
+import json
+import os
+
+import boto3
+
+client = boto3.client("secretsmanager")
+cached_secret = None
+
+
+def lambda_handler(event, context):
+    global cached_secret
+
+    if cached_secret is None:
+        response = client.get_secret_value(
+            SecretId=os.environ["SECRET_NAME"]
+        )
+        secret = json.loads(response["SecretString"])
+
+        key = secret.get("key")
+        kid = secret.get("kid")
+
+        if not isinstance(key, str) or len(key) != 64:
+            raise ValueError("Key phải là chuỗi hex gồm 64 ký tự")
+
+        try:
+            key_bytes = bytes.fromhex(key)
+        except ValueError:
+            raise ValueError("Key chứa ký tự không hợp lệ") from None
+
+        if len(key_bytes) != 32:
+            raise ValueError("Key phải có độ dài 32 byte")
+
+        if not isinstance(kid, str) or not kid:
+            raise ValueError("Secret thiếu kid hợp lệ")
+
+        cached_secret = secret
+
+    # Chỉ trả kết quả kiểm tra, không trả hoặc in khóa.
+    return {
+        "ok": True,
+        "message": "Đọc secret và kiểm tra định dạng thành công",
+        "kid": cached_secret["kid"]
+    }

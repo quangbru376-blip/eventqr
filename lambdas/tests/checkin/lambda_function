@@ -1,0 +1,109 @@
+import os
+from datetime import datetime, timezone
+
+import boto3
+from botocore.exceptions import ClientError
+
+table = boto3.resource("dynamodb").Table(
+    os.environ["TICKETS_TABLE"]
+)
+
+# Chỉ thao tác trên một vé dành riêng cho bài thử.
+TEST_KEY = {
+    "eventId": "TEST-WEEK1",
+    "ticketId": "TEST-TICKET-001"
+}
+
+
+def utc_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def lambda_handler(event, context):
+    action = event.get("action")
+
+    if action == "create":
+        try:
+            table.put_item(
+                Item={
+                    **TEST_KEY,
+                    "name": "Ve thu tuan 1",
+                    "status": "ISSUED",
+                    "createdAt": utc_now()
+                },
+                ConditionExpression="attribute_not_exists(eventId)"
+            )
+            return {
+                "statusCode": 201,
+                "message": "Đã tạo vé thử",
+                "status": "ISSUED",
+                **TEST_KEY
+            }
+
+        except ClientError as error:
+            if error.response["Error"]["Code"] != \
+                    "ConditionalCheckFailedException":
+                raise
+
+            return {
+                "statusCode": 409,
+                "message": "Vé thử đã tồn tại, không ghi đè"
+            }
+
+    if action == "checkin":
+        try:
+            response = table.update_item(
+                Key=TEST_KEY,
+                UpdateExpression=(
+                    "SET #s = :checked, checkedInAt = :now"
+                ),
+                ConditionExpression=(
+                    "attribute_exists(eventId) AND #s = :issued"
+                ),
+                ExpressionAttributeNames={
+                    "#s": "status"
+                },
+                ExpressionAttributeValues={
+                    ":issued": "ISSUED",
+                    ":checked": "CHECKED_IN",
+                    ":now": utc_now()
+                },
+                ReturnValues="ALL_NEW"
+            )
+
+            item = response["Attributes"]
+            return {
+                "statusCode": 200,
+                "message": "Check-in thành công",
+                "status": item["status"],
+                "checkedInAt": item["checkedInAt"]
+            }
+
+        except ClientError as error:
+            if error.response["Error"]["Code"] != \
+                    "ConditionalCheckFailedException":
+                raise
+
+            item = table.get_item(
+                Key=TEST_KEY,
+                ConsistentRead=True
+            ).get("Item")
+
+            if item is None:
+                return {
+                    "statusCode": 404,
+                    "message": "Vé thử chưa tồn tại"
+                }
+
+            return {
+                "statusCode": 409,
+                "error": "ConditionalCheckFailedException",
+                "message": "Từ chối check-in: vé không còn ISSUED",
+                "status": item["status"],
+                "checkedInAt": item.get("checkedInAt")
+            }
+
+    return {
+        "statusCode": 400,
+        "message": "action phải là create hoặc checkin"
+    }
