@@ -112,9 +112,6 @@ Quy tắc khi triển khai:
 - Mỗi thành viên có tài khoản Learner Lab riêng; tài nguyên không chia sẻ giữa hai tài khoản nên hệ thống cuối được deploy từ Git vào tài khoản chính.
 - Credentials của Learner Lab đổi mỗi lần Start Lab; nhớ cập nhật lại cho AWS CLI và Postman.
 
-### Không bao giờ đưa lên Git
-
-Khóa HMAC, Access Key, Secret Key, session token, API key thật, link vé thật, Account ID trong mã nguồn. `.gitignore` tối thiểu: `.env`, `*.zip`, `*.pem`, `.aws/`, `__pycache__/`.
 
 ## Tiến độ
 
