@@ -1,6 +1,6 @@
 # EventQR — Hệ thống quản lý sự kiện và check-in bằng QR code
 
-Đồ án môn **Cloud** (Đợt 1, 2026–2027) — nhóm **Domain Apps** — GVHD: Huỳnh Xuân Phụng.
+Đồ án môn **Cloud** (Đợt 1, 2026–2027) — nhóm **Domain Apps** — GVHD: TS. Huỳnh Xuân Phụng.
 
 EventQR cho phép người dùng đăng ký một sự kiện và nhận vé là một mã QR. Tại cổng, ban tổ chức quét QR bằng camera trên trang web; hệ thống xác minh vé thật bằng chữ ký HMAC và chỉ cho vào **một lần**. Ban tổ chức xem được thống kê số vé đã đăng ký và đã vào.
 
