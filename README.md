@@ -127,32 +127,12 @@ Kế hoạch 4 tuần, tính từ 05/10/2026.
 | 3 | 19–25/10 | Tích hợp, bảo mật, giám sát, IaC nếu kịp; đóng băng chức năng 25/10 | Chưa bắt đầu |
 | 4 | 26/10–01/11 | Kiểm thử tổng thể, tối ưu chi phí, báo cáo, demo, dọn tài nguyên | Chưa bắt đầu |
 
-## Điểm chưa kiểm chứng
-
-Các điểm sau đang là giả định, sẽ được kiểm chứng bằng thử nghiệm trên Learner Lab và cập nhật vào tài liệu:
-
-- Lambda dùng `LabRole` đọc được Secrets Manager.
-- CloudFront và Origin Access Control dùng được; camera chạy trên điện thoại qua HTTPS.
-- Cách nhận biết subscription SNS đang chờ xác nhận hay đã xác nhận; hành vi khi Subscribe lại cùng một email.
-- Presigned URL có sống đúng hạn qua lúc credentials tạm hết hạn hay không (nếu không thì dùng chế độ `inline` trả ảnh QR trực tiếp).
-- REST API, API key, usage plan, throttle và Gateway Responses tạo được trong Learner Lab.
-
-## Hạn chế đã biết
-
-- API key của route ban tổ chức nằm trong trình duyệt, chỉ là mức bảo vệ tối thiểu, không phải đăng nhập.
-- Mọi Lambda dùng chung `LabRole`, không áp dụng được quyền tối thiểu theo từng hàm (ràng buộc của Learner Lab).
-- `POST /register` công khai và nhận email tùy ý nên có thể bị lạm dụng để gửi thư xác nhận SNS tới người lạ; biện pháp trong phạm vi này là throttle, chưa có CAPTCHA.
-- Ai có link vé thì lấy được QR của vé đó; an toàn dựa vào `ticketId` ngẫu nhiên và khó đoán.
-- Chưa xoay vòng khóa HMAC (QR `v1` không chứa `kid`).
-- Gửi email phụ thuộc việc người dùng xác nhận subscription SNS (thư xác nhận hay vào mục spam), vì vậy link vé luôn được hiển thị trên web.
-- Lambda không đặt trong VPC để tránh NAT Gateway tốn phí; thiết kế serverless này không cần VPC.
-
 ## Nhóm thực hiện
 
 | Thành viên | Phụ trách |
 | --- | --- |
-| _(họ tên, MSSV)_ — A | Vé và dữ liệu: `register`, `checkin`, `stats`, DynamoDB, Secrets Manager, ký và kiểm tra HMAC |
-| _(họ tên, MSSV)_ — B | Gửi vé và giao diện: `create-event`, `generate-qr`, `get-ticket`, `resend`, S3, SNS, CloudFront, CloudWatch, các trang web |
+| _(Đặng Duy Quang, 24110307)_ — A | Vé và dữ liệu: `register`, `checkin`, `stats`, DynamoDB, Secrets Manager, ký và kiểm tra HMAC |
+| _(Trương Hoàng Long, 24110273)_ — B | Gửi vé và giao diện: `create-event`, `generate-qr`, `get-ticket`, `resend`, S3, SNS, CloudFront, CloudWatch, các trang web |
 
 Cả hai thành viên đều phải giải thích được toàn bộ cấu hình và mã nguồn khi vấn đáp.
 
