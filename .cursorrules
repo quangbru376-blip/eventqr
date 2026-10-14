@@ -1,0 +1,14 @@
+# CURSOR RULES — EVENTQR
+
+Tất cả các phiên làm việc của Cursor AI với dự án này BẮT BUỘC tuân thủ:
+1. Đọc hướng dẫn làm việc tại: project_memory/agent.md
+2. Đọc bộ nhớ ngữ cảnh tại: project_memory/project-memory.md
+3. Đọc kế hoạch chi tiết tại: docs/plan.md và AGENTS.md
+4. Ràng buộc AWS Learner Lab:
+   - Vùng us-east-1 duy nhất
+   - Chỉ dùng LabRole (không tạo IAM user/role/policy)
+   - Ngân sách <= 50 USD/tài khoản
+   - Tiền tố eventqr-, tag Project=EventQR, Owner=<Tên_SV>
+   - Tuyệt đối không hardcode bí mật / keys / account IDs
+   - Không đặt Lambda vào VPC
+5. Tuân thủ Write-back Protocol sau mỗi phiên làm việc (cập nhật worklog và memory).

@@ -142,3 +142,6 @@ Theo quy định của đề, phần có AI hỗ trợ được ghi rõ: các t�
 - [Kiến trúc](docs/architecture.md)
 - [Đặc tả API](docs/api.md)
 - [Quy ước đặt tên và tag](docs/naming.md)
+- [Kế hoạch 4 tuần (Master Plan)](docs/plan.md)
+- [Quy chuẩn cho AI Agent](AGENTS.md)
+- [Bộ nhớ ngữ cảnh dự án (Project Memory)](project_memory/project-memory.md)
