@@ -1,0 +1,26 @@
+{
+  "create-event": {
+    "httpMethod": "POST",
+    "body": "{\"name\":\"EventQR Demo\",\"startTime\":\"2026-10-25T08:00:00+07:00\",\"venue\":\"Hoi truong\"}"
+  },
+  "create-event-invalid": {
+    "httpMethod": "POST",
+    "body": "{\"name\":\"\",\"startTime\":\"2026-10-25T08:00:00\",\"venue\":\"Hoi truong\"}"
+  },
+  "register": {
+    "httpMethod": "POST",
+    "body": "{\"eventId\":\"THAY_EVENT_ID_VUA_TAO\",\"name\":\"Khach thu\",\"email\":\"THAY_EMAIL_BAN_KIEM_SOAT\"}"
+  },
+  "checkin": {
+    "httpMethod": "POST",
+    "body": "{\"eventId\":\"THAY_EVENT_ID\",\"qrPayload\":\"THAY_CHUOI_DOC_TU_QR_CUA_VE_THU\"}"
+  },
+  "checkin-malformed": {
+    "httpMethod": "POST",
+    "body": "{\"eventId\":\"11111111-1111-4111-8111-111111111111\",\"qrPayload\":\"QR-GIA\"}"
+  },
+  "stats": {
+    "httpMethod": "GET",
+    "pathParameters": {"eventId": "THAY_EVENT_ID"}
+  }
+}

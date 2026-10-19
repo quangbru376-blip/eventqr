@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Optional EventQR probe - existing LabRole, no IAM resources.
+Parameters:
+  ExistingLabRoleArn:
+    Type: String
+    Description: ARN of the existing LabRole in this account. Enter locally in Console.
+  Owner:
+    Type: String
+    Default: 24110273TruongHoangLong
+Resources:
+  ProbeBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Project
+          Value: EventQR
+        - Key: Owner
+          Value: !Ref Owner
+  ProbeFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: eventqr-iac-probe
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Role: !Ref ExistingLabRoleArn
+      Timeout: 5
+      MemorySize: 128
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              return {"ok": True, "message": "EventQR IaC probe"}
+      Tags:
+        - Key: Project
+          Value: EventQR
+        - Key: Owner
+          Value: !Ref Owner

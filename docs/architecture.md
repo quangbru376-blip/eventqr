@@ -1,5 +1,7 @@
 # Kiến trúc hệ thống — EventQR (v1, 11/10/2026)
 
+> **Ghi chú 19/10:** tài liệu này lưu thiết kế v1. Source tuần 2 đã ghép theo phương án API Gateway → Lambda web → S3 private, với 8 Lambda tính cả web; sơ đồ CloudFront bên dưới là phương án trước đây. Trạng thái local và các mức bằng chứng AWS mới nhất nằm trong [báo cáo ghép mã](WEEK2-STATUS.md) và [README](../README.md#kiến-trúc). Không coi ghi nhận v1 là xác nhận deployment hiện tại.
+
 Đề tài: Hệ thống quản lý sự kiện và check-in bằng QR code (nhóm Domain Apps, môn Cloud, GVHD Huỳnh Xuân Phụng).
 
 Trạng thái: bản thiết kế v1, chưa triển khai. Một số điểm kỹ thuật còn là giả định cần kiểm chứng trên AWS Learner Lab (mục 9). Tài liệu được soạn với sự hỗ trợ của AI (Claude).

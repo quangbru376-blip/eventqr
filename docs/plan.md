@@ -1,5 +1,17 @@
 # KẾ HOẠCH TRIỂN KHAI 4 TUẦN (MASTER PLAN) — EVENTQR
 
+> **Tiếp nhận 19/10/2026:** đã sang tuần 3, đang hoàn tất phạm vi tuần 2. Mã từ kit A/B bên ngoài đã ghép vào repo local; đây là kết quả chuẩn bị mã/kiểm thử cục bộ. Checklist AWS lịch sử bên dưới chỉ được đánh hoàn thành khi có kết quả thật. Tiếp tục Lambda web + API Gateway theo handoff; tổng 8 Lambda nếu tính cả web. Xem [báo cáo ghép mã](WEEK2-STATUS.md).
+
+## Tiến độ mã và kiểm chứng ngày 19/10
+
+- [x] Kết hợp source phần A/B, thống nhất ticket_mail, giữ HMAC; build lại 8 ZIP local.
+- [x] Kiểm thử local 38/38 unittest, 7/7 HMAC; kiểm tra cú pháp JS và package/source.
+- [x] Đồng bộ worklog đã xác nhận: tuần 2 A 8,25h/B 10,50h, ngày 19/10 tính tuần 3 A 1,25h/B 1,00h.
+- [ ] Kiểm kê triển khai AWS, xác nhận API key/usage plan và retention 7 ngày trên tài khoản chính.
+- [ ] Có bằng chứng luồng create-event → register → QR/email → checkin 200/409 → stats, camera điện thoại và presigned qua phiên lab.
+
+Các checklist AWS lịch sử chỉ được đánh hoàn thành theo kết quả thật; source/ZIP và mock test là kết quả local. Tổng giờ lấy từ [worklog tuần 2](../worklog/week2/worklog_markdown.md) và [tuần 3](../worklog/week3/worklog_markdown.md), không cộng lặp 4 mục ngày 19/10.
+
 > **Đồ án:** Hệ thống quản lý sự kiện và check-in bằng QR code (EventQR)
 > **Môn:** Cloud Computing (Đợt 1, 2026–2027) — Nhóm: Domain Apps — GVHD: TS. Huỳnh Xuân Phụng
 > **Nhóm sinh viên thực hiện:**
@@ -18,8 +30,8 @@
 | Tuần | Mốc thời gian | Trọng tâm | Trạng thái | Giờ thực tế A (Quang) | Giờ thực tế B (Long) | Báo cáo & minh chứng |
 | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
 | **Tuần 1** | 05/10 – 11/10 | Nền tảng, kiến trúc, bài thử rủi ro | **Xong, còn 3 tồn đọng** (xem mục Tuần 1) | 9.75 h | 9.2 h | Báo cáo T1 bị từ chối lần đầu, **đang nộp lại** (body + link GitHub); số ảnh minh chứng: kiểm đếm lại |
-| **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **ĐANG THỰC HIỆN** | 1.5 h *(đến 12/10)* | 1.5 h *(đến 12/10)* | `docs/api.md`; mã Lambda trong `lambdas/` |
-| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | Chưa bắt đầu | Dự kiến 11.5 h | Dự kiến 12.0 h | Ảnh tài khoản chính |
+| **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **Ngày/giờ đã được người dùng xác nhận; AWS còn chờ minh chứng** | 8.25 h *(A01–A10)* | 10.50 h *(B01–B12)* | [Worklog tuần 2](../worklog/week2/worklog_markdown.md); source local; AWS cần đối chiếu |
+| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | Đã bắt đầu; có giờ xác nhận ngày 19/10 | Đã ghi 1.25 h; dự kiến cả tuần 11.5 h | Đã ghi 1.00 h; dự kiến cả tuần 12.0 h | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); A11–A12/B13–B14 tính tuần này |
 | **Tuần 4** | 26/10 – 01/11 | Nghiệm thu 21 ca, video demo, báo cáo, dọn dẹp | Chưa bắt đầu | Dự kiến 11.0 h | Dự kiến 11.0 h | Video, báo cáo cuối, bảng nghiệm thu |
 | **TỔNG** | 4 tuần | | | Dự kiến ~44 h | Dự kiến ~44 h | Chuẩn ≥ 32 h/người |
 
@@ -92,7 +104,7 @@ Cách làm đã chọn:
 
 | Ngày | A (Quang) — Vé & Dữ liệu | Giờ | B (Long) — Gửi vé & Web UI | Giờ |
 | :--- | :--- | :---: | :--- | :---: |
-| **T2 12/10** | [x] Chốt đặc tả API v0.2; đưa [`docs/api.md`](docs/api.md) vào repo; chuẩn bị helper DynamoDB. | 1.5 | [x] Nghiên cứu thư viện sinh QR (segno/qrcode); thống nhất hợp đồng `register` ↔ `generate-qr`. | 1.5 |
+| **T2 12/10** | [x] Chốt đặc tả API v0.2; đưa [`docs/api.md`](api.md) vào repo; chuẩn bị helper DynamoDB. | 1.5 | [x] Nghiên cứu thư viện sinh QR (segno/qrcode); thống nhất hợp đồng `register` ↔ `generate-qr`. | 1.5 |
 | **T3 13/10** | [ ] Lambda `eventqr-create-event`: validate, sinh UUID, ghi `eventqr-events`; test payload. | 2.0 | [ ] Lambda `eventqr-generate-qr`: nhận `{eventId, ticketId}`, đọc secret, ký HMAC, sinh PNG, lưu S3 `eventqr-qr`. Tạo **secret thử** trong tài khoản của Long. | 2.0 |
 | **T4 14/10** | [ ] Mô-đun `ticket_mail.py`; bắt đầu `eventqr-register`; **deploy `generate-qr` (từ Git) vào tài khoản Quang** để `register` gọi được. | 2.0 | [ ] **Hoàn tất bài thử presigned URL (chốt dùng `presigned` hay `inline`)**; `register.html` và `ticket.html`. | 2.0 |
 | **T5 15/10** | [ ] Hoàn thiện `register` (`attribute_not_exists`, SNS); Lambda `eventqr-checkin`. | 2.0 | [ ] Lambda `eventqr-get-ticket` theo chế độ đã chốt; Lambda `eventqr-resend`. Xác nhận retention 7 ngày. | 2.0 |
@@ -156,7 +168,7 @@ Cách làm đã chọn:
 3. **Bước 2:** cập nhật số giờ từ **worklog** (nguồn chuẩn); cộng lại để số trong plan và worklog khớp nhau.
 4. **Bước 3:** cập nhật trạng thái tuần; không ghi "100%" nếu còn tồn đọng.
 5. **Bước 4:** nếu có thay đổi kỹ thuật hoặc yêu cầu từ GVHD, sửa đầu việc tuần tới ngay trong file này.
-6. **Bước 5:** đồng bộ vào [`project_memory/project-memory.md`](project_memory/project-memory.md) (Mục 14).
+6. **Bước 5:** đồng bộ trạng thái mã, kiểm thử và minh chứng vào [trạng thái tuần 2](WEEK2-STATUS.md).
 
 ## NHẬT KÝ THAY ĐỔI SO VỚI BẢN TRƯỚC
 

@@ -3,3 +3,5 @@
 *.pem
 .aws/
 __pycache__/
+local/
+dist/

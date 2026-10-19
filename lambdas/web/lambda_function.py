@@ -1,7 +1,7 @@
 """EventQR week 1: GET /web/{page} serves a permitted HTML file from private S3.
 
 AI-assisted draft; deploy with existing LabRole. WEB_BUCKET is required.
-Only index.html is exposed in this week 1 version. No QR/email/secret objects.
+Week 2: serve only the listed frontend files. No QR/email/secret objects.
 """
 import logging
 import os
@@ -12,8 +12,19 @@ from botocore.exceptions import ClientError
 s3 = boto3.client("s3")
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-ALLOWED_PAGES = {"index.html"}
-MAX_HTML_BYTES = 1024 * 1024
+ALLOWED_FILES = {
+    'index.html': 'text/html; charset=utf-8',
+    'register.html': 'text/html; charset=utf-8',
+    'ticket.html': 'text/html; charset=utf-8',
+    'checkin.html': 'text/html; charset=utf-8',
+    'stats.html': 'text/html; charset=utf-8',
+    'config.js': 'application/javascript; charset=utf-8',
+    'app.js': 'application/javascript; charset=utf-8',
+    'checkin.js': 'application/javascript; charset=utf-8',
+    'html5-qrcode.min.js': 'application/javascript; charset=utf-8',
+    'styles.css': 'text/css; charset=utf-8',
+}
+MAX_HTML_BYTES = 2 * 1024 * 1024
 
 
 def response(status_code, body, content_type="text/plain; charset=utf-8"):
@@ -35,7 +46,7 @@ def lambda_handler(event, context):
         return response(405, "Method not allowed")
 
     page = (event.get("pathParameters") or {}).get("page", "")
-    if page not in ALLOWED_PAGES:
+    if page not in ALLOWED_FILES:
         return response(404, "Page not found")
 
     bucket = os.environ.get("WEB_BUCKET")
@@ -52,7 +63,7 @@ def lambda_handler(event, context):
             body_stream.close()
         if len(raw) > MAX_HTML_BYTES:
             logger.error("WEB_FILE_TOO_LARGE")
-            return response(500, "Web file exceeds the week 1 size limit")
+            return response(500, "Web file exceeds the size limit")
         html = raw.decode("utf-8-sig")
     except ClientError as error:
         code = error.response.get("Error", {}).get("Code", "Unknown")
@@ -65,4 +76,4 @@ def lambda_handler(event, context):
         return response(500, "Save the HTML file as UTF-8")
 
     logger.info("WEB_PAGE_SERVED")
-    return response(200, html, "text/html; charset=utf-8")
+    return response(200, html, ALLOWED_FILES[page])
