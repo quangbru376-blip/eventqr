@@ -15,7 +15,7 @@
 ```
 Tuần 1 (05–11/10): Nền tảng, thiết kế & bài thử rủi ro   [100% HOÀN THÀNH]
 Tuần 2 (12–18/10): Chức năng lõi & Kiểm thử thành phần     [100% HOÀN THÀNH - SETUP & MÃ NGUỒN XONG]
-Tuần 3 (19–25/10): Tích hợp, bảo mật, giám sát            [ĐANG THỰC HIỆN - CLOUDWATCH & TEST ĐIỆN THOẠI]
+Tuần 3 (19–25/10): Tích hợp, bảo mật, giám sát            [100% HOÀN THÀNH - ĐỒNG BỘ WORKLOG & ĐÓNG BĂNG]
 Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT ĐẦU - CHUẨN BỊ KỊCH BẢN]
 ```
 

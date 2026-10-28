@@ -288,7 +288,7 @@ Mỗi dòng: ngày, người làm, việc đã làm, số giờ thật, có AI h
 - `architecture.md`: kiến trúc hệ thống và sơ đồ (tại [docs/evidence/week1/architecture.md](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/evidence/week1/architecture.md)).
 - `worklog/week1/worklog_markdown.md`: nhật ký công việc tuần 1 (Quang 9.75h, Long 9.2h).
 - `worklog/week2/worklog_markdown.md`: nhật ký công việc tuần 2 (Quang 8.25h, Long 10.50h — Hoàn thành 100% mục tiêu tuần 2).
-- `worklog/week3/worklog_markdown.md`: nhật ký công việc tuần 3 (đã ghi nhận bước đầu ngày 19/10 và đang bổ sung).
+- `worklog/week3/worklog_markdown.md`: nhật ký công việc tuần 3 (Quang 11.50h, Long 12.00h — Hoàn thành 100% mục tiêu tuần 3 theo kế hoạch).
 - `project_memory/agent.md`: hướng dẫn vận hành và giao thức ghi nhận dành cho AI Agent.
 - `project_memory/roadmap.md`: kế hoạch hành động 4 tuần chi tiết từng ngày.
 - `docs/WEEK2-STATUS.md`: báo cáo trạng thái hoàn thiện mã nguồn và kiểm thử tuần 2.
@@ -300,9 +300,9 @@ Mỗi dòng: ngày, người làm, việc đã làm, số giờ thật, có AI h
   - Người dùng đã hoàn thành toàn bộ công việc setup của tuần 2.
   - Mã nguồn 8 hàm Lambda và 4 trang frontend đã hoàn tất trong repo, 38/38 unit test local pass, 7/7 test HMAC pass. Đã build 8 gói ZIP.
   - Giờ làm việc tuần 2: Quang 8.25h, Long 10.50h (cả 2 đều $\ge 8$h).
-- **Tuần 3 (19–25/10):** **ĐANG HOÀN TẤT & CHUẨN BỊ ĐÓNG BĂNG.**
-  - Trọng tâm còn lại: Cấu hình CloudWatch (Retention 7 ngày, `eventqr-dashboard`, 2 Alarms), kiểm thử camera điện thoại thật qua HTTPS và kiểm chứng gửi email SNS.
-  - Sau khi xong các bài thử trên sẽ chốt **Đóng băng tính năng (Feature Freeze)** để chuyển sang Tuần 4.
+- **Tuần 3 (19–25/10):** **ĐÃ ĐỒNG BỘ WORKLOG & ĐÓNG BĂNG TÍNH NĂNG (FEATURE FREEZE).**
+  - Đã cập nhật đầy đủ bảng nhật ký công việc Tuần 3 (`worklog/week3/worklog_markdown.md`): Quang 11.50h (9 tác vụ), Long 12.00h (9 tác vụ), tổng 23.50h, đạt định mức $\ge 8$h/người.
+  - Nội dung bao quát: Dựng hạ tầng tài khoản chính, API Gateway REST `eventqr-api` stage `v1` kèm CORS, bảo mật API Key/Usage Plan, Gateway Responses 403/429, CloudWatch dashboard & alarms, kiểm thử camera điện thoại và đóng băng tính năng vào 25/10.
 - **Tuần 4 (26/10–01/11):** Chuẩn bị chạy nghiệm thu 21 test case, quay video demo $\le 10$ phút và hoàn thiện báo cáo chi phí.
 
 ## 15. Trợ lý mới nên làm tiếp
