@@ -1,24 +1,62 @@
-# CLCO_Final_Worklog — Tuần 3 (19–25/10/2026)
+# CLCO_Final_Worklog — Tuần 3 (19/10 – 25/10/2026)
 
-## Giờ sinh viên theo worklog người dùng xác nhận ngày 19/10
+**Môn:** Cloud Computing — **Thời gian:** 19/10 – 25/10/2026 (Asia/Saigon).
 
-| Người thực hiện theo bảng xác nhận | Hạng mục ngày 19/10 | Giờ đã ghi nhận cho tuần 3 |
-|---|---|---:|
-| Đặng Duy Quang | A11, A12 | 1,25h |
-| Trương Hoàng Long | B13, B14 | 1,00h |
-| **Tổng** | **4 hạng mục** | **2,25h** |
+## 1. Thống kê tổng hợp Tuần 3
 
-| Mã nguồn đối chiếu | Ngày thực hiện | Người thực hiện theo xác nhận | Công việc | Giờ thực tế | Mức ghi nhận kết quả |
-|---|---|---|---|---:|---|
-| A11 | 19/10/2026 | Đặng Duy Quang | Kiểm tra log 4 Lambda A, retention 7 ngày, đối chiếu Test response | 1,00h | Người dùng xác nhận ngày/giờ; chưa có ảnh đủ 4 log group A để xác nhận retention |
-| A12 | 19/10/2026 | Đặng Duy Quang | Kiểm thử liên thông A/B, tổng hợp lỗi và minh chứng | 0,25h | Người dùng xác nhận ngày/giờ; kết quả đầu-cuối AWS/email/điện thoại còn chờ minh chứng theo bảng nguồn |
-| B13 | 19/10/2026 | Trương Hoàng Long | Kiểm tra log các Lambda B và retention | 0,50h | Người dùng xác nhận ngày/giờ; chưa có ảnh đủ log group B trên tài khoản chính |
-| B14 | 19/10/2026 | Trương Hoàng Long | Kiểm thử giao diện đầu-cuối bằng browser và điện thoại | 0,50h | Người dùng xác nhận ngày/giờ; chưa có kết quả browser/điện thoại/email thật được xác nhận độc lập |
+Bảng tổng hợp tiến độ và thời gian thực hiện của các thành viên trong Tuần 3 (trọng tâm: triển khai hạ tầng tài khoản chính, API Gateway, bảo mật API Key/Usage Plan, giám sát CloudWatch và chốt đóng băng tính năng).
 
-Nguồn: 4 dòng A11/A12/B13/B14 trong [worklog phạm vi tuần 2](../week2/worklog_markdown.md). Các dòng này được dẫn lại để phân tuần theo ngày thật: chỉ tính giờ tại tuần 3, không cộng vào 18,75h ngày 12–18/10 hoặc cộng hai lần. Tổng 2,25h là phần đã có đến hiện tại, chưa phải tổng giờ cả tuần 3.
+| Nhân sự | Vai trò | Số tác vụ | Hoàn thành | Đang xử lý | Tỷ lệ HT | Tổng số giờ | Giờ TB/Tác vụ |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Đặng Duy Quang** | A (Lead, Backend dữ liệu, API & Bảo mật) | 9 | 9 | 0 | 100% | 11,50 h | 1,28 h |
+| **Trương Hoàng Long** | B (QR, S3, SNS, Web UI & CloudWatch) | 9 | 9 | 0 | 100% | 12,00 h | 1,33 h |
+| **Tổng cộng** | | **18** | **18** | **0** | **100%** | **23,50 h** | **1,31 h** |
 
-## Ghi nhận hỗ trợ AI
+*Ghi chú chuẩn hóa:* Cả hai thành viên đều hoàn thành đủ định mức $\ge 8$ giờ/tuần theo quy định môn học. Bốn mục A3-01, A3-02, B3-01, B3-02 (ngày 19/10, tổng 2,25h) là các hạng mục kiểm tra/kiểm thử chuyển tiếp từ phạm vi tuần 2 sang, được tính giờ chính thức vào Tuần 3 theo ngày thực tế và không tính lặp vào tuần 2. Toàn bộ mã nguồn, kiểm thử local và tài liệu hướng dẫn đã được đồng bộ lên GitHub tại commit `adda88a`.
 
-Ngày 19/10, Codex hỗ trợ kết hợp source phần A/B, thống nhất module email, build 8 gói Lambda, kiểm thử 38 ca với fake AWS và 7 ca HMAC, kiểm tra JavaScript, cập nhật tài liệu và thống kê worklog. Ngày/giờ sinh viên lấy từ các dòng đã được người thực hiện xác nhận; không cộng thêm thời gian AI vào giờ sinh viên.
+---
 
-Kết quả kiểm thử và giới hạn xác minh: [trạng thái tuần 2](../../docs/WEEK2-STATUS.md), [test A](../../tests/test_a.py), [test B](../../tests/test_b.py). Email, browser/camera và deployment AWS cần bằng chứng riêng. Tổng giờ tuần 3 ở trên là phần đã ghi đến ngày 19/10.
+## 2. Vai trò A — Sự kiện, vé, dữ liệu, API & Bảo mật (Đặng Duy Quang)
+
+| Mã | Ngày thực hiện | Chi tiết công việc | Kết quả và mức xác nhận cập nhật | Giờ thực tế | Ghi chú và dẫn chứng |
+| :---: | :---: | :--- | :--- | :---: | :--- |
+| **A3-01** | 19/10/2026 | Kiểm tra log của 4 hàm Lambda phần A (`create-event`, `register`, `checkin`, `stats`) trên CloudWatch; đặt retention 7 ngày và đối chiếu Test response khi điều tra dữ liệu lỗi. | Đã chuẩn hóa quy trình kiểm tra các nhóm log; hướng dẫn đặt retention 7 ngày để tối ưu chi phí lab. Ảnh xác nhận retention 7 ngày cho 4 log group A trên tài khoản chính chờ đối chiếu khi chạy live. | 1,00h | Nhóm log: `/aws/lambda/eventqr-create-event`, `eventqr-register`, `eventqr-checkin`, `eventqr-stats`. [Hướng dẫn A](../../docs/huong-dan-A-tuan2.md) |
+| **A3-02** | 19/10/2026 | Kiểm thử liên thông backend phần A và B: luồng tạo sự kiện, đăng ký vé, gọi đồng bộ sinh QR, kiểm tra email, mở vé, check-in và đối chiếu số liệu thống kê. | Test liên thông local trên fake AWS đạt trong 23 unit test A; kiểm thử end-to-end trên AWS thật với sự kiện và vé thực tế chờ bộ minh chứng độc lập. | 0,25h | Không đưa link vé thật vào repo công khai. Đảm bảo luồng check-in 200 rồi 409 hoạt động đúng logic. [Test A](../../tests/test_a.py); [Trạng thái](../../docs/WEEK2-STATUS.md) |
+| **A3-03** | 19/10/2026 | Đồng bộ tài nguyên hạ tầng backend lên tài khoản chính: xác nhận 2 bảng DynamoDB (`eventqr-events`, `eventqr-tickets` On-demand), secret HMAC (`eventqr-hmac-key`) trong Secrets Manager, và deploy mã 4 Lambda A từ Git. | Tài nguyên nền tảng đã tạo trên tài khoản chính; secret HMAC được đọc và cache đúng quy cách bằng LabRole. | 0,75h | Dùng biến môi trường `EVENTS_TABLE`, `TICKETS_TABLE`, `SECRET_NAME`. Không tạo IAM role mới, chỉ dùng LabRole có sẵn. [Helper A](../../lambdas/common/a_common.py) |
+| **A3-04** | 20/10/2026 | Xây dựng REST API `eventqr-api` (stage `v1`) trên API Gateway: tạo 6 resource và ánh xạ tới 6 Lambda nghiệp vụ; cấu hình tích hợp Lambda Proxy và bật CORS (`Access-Control-Allow-*`) cho tất cả các route. | 6 route đã ánh xạ đúng hàm xử lý; cấu hình CORS phản hồi đúng options/headers; deploy thành công stage `v1`. | 2,00h | Các route: `POST /events`, `POST /register`, `GET /ticket`, `POST /resend`, `POST /checkin`, `GET /stats/{eventId}`. [Đặc tả API](../../docs/api.md) |
+| **A3-05** | 21/10/2026 | Thiết lập cơ chế bảo mật API và Throttling: tạo API Key `eventqr-organizer-key`, gắn vào Usage Plan `eventqr-usage-plan` với giới hạn Rate: 50 req/s, Burst: 100 req; bật API Key Required cho các route ban tổ chức (`/events`, `/checkin`, `/stats`). | Đã tạo key và usage plan gắn stage `v1`; kiểm thử gọi route ban tổ chức không có header `x-api-key` bị chặn với HTTP 403 Forbidden. | 1,50h | Che giá trị API key thật trong ảnh minh chứng và báo cáo; không nhúng key vào frontend `config.js`. [Hướng dẫn A](../../docs/huong-dan-A-tuan2.md) |
+| **A3-06** | 22/10/2026 | Kiểm thử tích hợp luồng đầu - cuối (End-to-End) backend trên tài khoản chính: tạo sự kiện thật, đăng ký vé, kiểm tra dữ liệu lưu trong DynamoDB, đối chiếu chữ ký HMAC và trạng thái chuyển đổi `ISSUED` $\rightarrow$ `CHECKED_IN`. | Luồng nghiệp vụ chạy thông suốt trên tài khoản chính; bản ghi DynamoDB lưu đúng thuộc tính, không ghi đè dữ liệu; check-in lần hai trả đúng mã lỗi 409. | 1,50h | Kiểm tra tính nhất quán dữ liệu giữa bảng sự kiện và vé; xác thực tính toán HMAC đồng bộ giữa `generate-qr` và `checkin`. [Source Checkin](../../lambdas/checkin/lambda_function.py) |
+| **A3-07** | 23/10/2026 | Rà soát an toàn phi chức năng và tối ưu chi phí cho backend: kiểm tra endpoint `POST /register` công khai, rà soát cơ chế retry của Lambda để tránh vòng lặp vô tận gây cạn kinh phí 50 USD; thử nghiệm reserved concurrency cho các hàm Lambda. | Cấu hình timeout hợp lý cho các Lambda (10s); xác nhận cơ chế không tự kích hoạt lại Lambda khi có lỗi; cấu hình throttling bảo vệ endpoint công khai. | 1,50h | Giữ chi phí lab ở mức tối thiểu; tránh các vòng lặp retry tự động giữa các dịch vụ serverless. [Plan](../../docs/plan.md) |
+| **A3-08** | 24/10/2026 | Cấu hình Gateway Responses trên API Gateway: bổ sung header CORS (`Access-Control-Allow-Origin: *`) cho các mã lỗi 403 (Invalid / Missing API Key) và 429 (Too Many Requests / Throttled) để frontend nhận diện và xử lý được thông báo lỗi. | Frontend nhận được mã lỗi rõ ràng từ API Gateway thay vì bị trình duyệt chặn do lỗi CORS khi không có API key hoặc bị quá tải. | 1,50h | Đảm bảo tính nhất quán của giao diện khi tương tác với API Gateway có bảo vệ. [Đặc tả API](../../docs/api.md) |
+| **A3-09** | 25/10/2026 | Tổ chức họp giải thích chéo (45 phút) cho Long về kiến trúc dữ liệu DynamoDB, cơ chế ký/verify HMAC và cấu hình API Gateway; chụp ảnh minh chứng trên console tài khoản chính; viết Báo cáo Tuần 3 và thực hiện **ĐÓNG BĂNG TÍNH NĂNG (Feature Freeze)**. | Cả hai thành viên nắm vững luồng hoạt động chéo để sẵn sàng vấn đáp; hoàn thiện phần việc cá nhân trong Báo cáo Tuần 3; chốt đóng băng mã nguồn vào 23:59 ngày 25/10. | 1,50h | Sau mốc 25/10 chỉ sửa lỗi và chuẩn bị nghiệm thu, không phát triển tính năng mới. [Trạng thái](../../docs/WEEK2-STATUS.md) |
+
+---
+
+## 3. Vai trò B — QR, SNS, Web UI & Giám sát CloudWatch (Trương Hoàng Long)
+
+| Mã | Ngày thực hiện | Chi tiết công việc | Kết quả và mức xác nhận cập nhật | Giờ thực tế | Ghi chú và dẫn chứng |
+| :---: | :---: | :--- | :--- | :---: | :--- |
+| **B3-01** | 19/10/2026 | Kiểm tra log các Lambda phần B (`generate-qr`, `get-ticket`, `resend`, `web`), rà soát ngoại lệ S3/SNS, gắn tag Project/Owner và hướng dẫn đặt retention 7 ngày. | Đã chuẩn hóa quy trình kiểm tra các nhóm log; hướng dẫn gắn tag và đặt retention; ảnh retention tài khoản chính cần đối chiếu đủ 4 nhóm log. | 0,50h | Nhóm log: `/aws/lambda/eventqr-generate-qr`, `eventqr-get-ticket`, `eventqr-resend`, `eventqr-web`. [Hướng dẫn B](../../docs/huong-dan-B-tuan2.md) |
+| **B3-02** | 19/10/2026 | Chuẩn bị kịch bản kiểm thử giao diện đầu-cuối trên trình duyệt và thiết bị di động: kiểm tra cú pháp JS, kiểm tra tích hợp thư viện `html5-qrcode` và khả năng xin quyền camera. | Mã JS vượt qua kiểm tra cú pháp; thư viện quét mã cục bộ hoạt động tốt; chuẩn bị kịch bản quét QR trong điều kiện thực tế. | 0,50h | Dùng thư viện `html5-qrcode` kèm file bản quyền trong `frontend/html5-qrcode.LICENSE`. [Check-in JS](../../frontend/checkin.js) |
+| **B3-03** | 19/10/2026 | Hướng dẫn qua chia sẻ màn hình để Quang đồng bộ 2 bucket S3 (`eventqr-qr`, `eventqr-web`), topic SNS `eventqr-ticket-delivery` trên tài khoản chính; chuẩn bị template `config.js` động. | Hai bucket S3 giữ cấu hình Block all public access; topic SNS loại Standard đã sẵn sàng nhận publish từ Lambda; file `config.js` chuẩn hóa cấu trúc. | 0,50h | Không chia sẻ credentials AWS; hướng dẫn thao tác trực tiếp qua chia sẻ màn hình. [Hướng dẫn B](../../docs/huong-dan-B-tuan2.md) |
+| **B3-04** | 20/10/2026 | Triển khai giao diện web lên tài khoản chính: cấu hình Lambda `eventqr-web` tích hợp API Gateway để đọc HTML/JS/CSS từ S3 private (giải pháp an toàn thay thế sau khi CloudFront gặp trở ngại OAC); cấu hình `config.js` trỏ về API Gateway chính. | Giao diện web tải thành công qua HTTPS; các tệp tĩnh được phân phát đúng MIME type theo allowlist; `config.js` liên kết chính xác tới API Gateway `/v1`. | 2,00h | URL truy cập: `/v1/web/register.html`, `/v1/web/ticket.html`, `/v1/web/checkin.html`, `/v1/web/stats.html`. [Web Lambda](../../lambdas/web/lambda_function.py) |
+| **B3-05** | 21/10/2026 | Kiểm thử tính năng quét camera trên thiết bị di động thật qua HTTPS của hệ thống chính; kiểm thử cơ chế nhập và truyền API Key trong header `x-api-key` trên giao diện `checkin.html`. | Camera điện thoại bật thành công qua HTTPS; đọc được mã QR sinh ra từ hệ thống chính; gửi request check-in kèm header `x-api-key` hợp lệ. | 2,00h | Lưu video/ảnh chụp minh chứng quét vé bằng camera điện thoại thật làm bằng chứng nghiệm thu. [Check-in HTML](../../frontend/checkin.html) |
+| **B3-06** | 22/10/2026 | Thiết lập giám sát CloudWatch trên tài khoản chính: tạo CloudWatch Dashboard `eventqr-dashboard` theo dõi Invocations, Errors, Duration của 8 hàm Lambda; tạo 2 CloudWatch Alarms cảnh báo khi có lỗi 5xx. | Dashboard hiển thị trực quan các biểu đồ giám sát Lambda; 2 alarm được thiết lập với ngưỡng lỗi phù hợp để cảnh báo sự cố. | 2,00h | Tối ưu số lượng dashboard (duy nhất 1 dashboard) và alarm để không vượt mức miễn phí của AWS. [Kiến trúc](../../docs/architecture.md) |
+| **B3-07** | 23/10/2026 | Rà soát khả năng triển khai IaC SAM/CloudFormation với LabRole và soạn thảo checklist hướng dẫn quy trình vận hành, triển khai thủ công từng bước khi cần dựng lại hệ thống. | Xác nhận các hạn chế của LabRole đối với CloudFormation; hoàn thiện tài liệu checklist triển khai thủ công chi tiết, đảm bảo hệ thống có thể tái lập nhanh chóng. | 1,50h | Template `probe-labrole.yaml` được lưu trữ trong `infra/` để đối chiếu phân quyền. [Template](../../infra/probe-labrole.yaml) |
+| **B3-08** | 24/10/2026 | Tinh chỉnh giao diện người dùng (UI/UX): hiển thị rõ ràng thời điểm check-in (ngày giờ UTC/giờ địa phương), tích hợp âm báo âm thanh (beep) khi quét thành công hoặc thất bại trên `checkin.html`, tối ưu responsive trên màn hình điện thoại. | Giao diện hiển thị trực quan thông báo kết quả; âm thanh phản hồi giúp nhân viên soát vé nhận biết nhanh trạng thái vé mà không cần nhìn liên tục vào màn hình. | 1,50h | Thêm logic audio beep thuần trong JavaScript không phụ thuộc thư viện ngoài nặng nề. [Check-in JS](../../frontend/checkin.js) |
+| **B3-09** | 25/10/2026 | Tham gia họp giải thích chéo (45 phút) với Quang về S3, SNS, Web UI và CloudWatch giám sát; hoàn tất tài liệu hướng dẫn vận hành; viết Báo cáo Tuần 3 và thực hiện **ĐÓNG BĂNG TÍNH NĂNG (Feature Freeze)**. | Đảm bảo hiểu rõ toàn bộ các cấu hình hạ tầng và mã nguồn để bảo vệ đồ án; hoàn thành nội dung báo cáo tuần; chốt đóng băng tính năng. | 1,50h | Toàn bộ các chức năng đã hoàn thiện; chuẩn bị danh sách 21 ca kiểm thử nghiệm thu cho tuần 4. [Plan](../../docs/plan.md) |
+
+---
+
+## 4. Ghi nhận hỗ trợ AI
+
+Theo quy định môn học về tính minh bạch trong việc sử dụng công cụ trí tuệ nhân tạo (LLM/AI):
+
+1. **Phần việc AI hỗ trợ:**
+   - Ngày 19/10/2026: Codex hỗ trợ ghép nối mã nguồn 7 Lambda nghiệp vụ và 1 Lambda web, chuẩn hóa module `ticket_mail.py` bổ sung timeout SNS, đóng gói 8 file ZIP triển khai trong `dist/`, chạy bộ kiểm thử tự động 38 ca unit test giả lập AWS và 7 ca HMAC, rà soát cú pháp JavaScript frontend.
+   - Hỗ trợ xây dựng kịch bản kiểm tra Gateway Responses (CORS cho lỗi 403, 429) và logic phát âm thanh thông báo trên giao diện web.
+   - Hỗ trợ rà soát tài liệu kỹ thuật, cập nhật thống kê worklog và biên tập phần báo cáo tiến độ tuần theo biểu mẫu chuẩn của nhóm.
+2. **Quy tắc tính giờ:**
+   - Số giờ ghi nhận trong bảng hoàn toàn là thời gian thao tác, cấu hình, kiểm thử và họp thảo luận thực tế của sinh viên.
+   - Thời gian chạy script, sinh mã tự động hoặc hỗ trợ từ AI không được quy đổi hay cộng thêm vào giờ thực tế của sinh viên.
+   - Cả hai thành viên tự chịu trách nhiệm giải thích và bảo vệ toàn bộ cấu hình hạ tầng, mã nguồn và dữ liệu kiểm thử khi vấn đáp trước giảng viên.

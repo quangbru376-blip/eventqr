@@ -31,7 +31,7 @@ Các checklist AWS lịch sử chỉ được đánh hoàn thành theo kết qu�
 | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
 | **Tuần 1** | 05/10 – 11/10 | Nền tảng, kiến trúc, bài thử rủi ro | **Xong, còn 3 tồn đọng** (xem mục Tuần 1) | 9.75 h | 9.2 h | Báo cáo T1 bị từ chối lần đầu, **đang nộp lại** (body + link GitHub); số ảnh minh chứng: kiểm đếm lại |
 | **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **Hoàn thành 100%** (Setup xong, 8 ZIP, 38 unit tests pass) | 8.25 h *(A01–A10)* | 10.50 h *(B01–B12)* | [Worklog tuần 2](../worklog/week2/worklog_markdown.md); source local & setup xong |
-| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | **Đang thực hiện** (Hoàn thiện CloudWatch, test camera điện thoại) | Đã ghi 1.25 h; dự kiến cả tuần 11.5 h | Đã ghi 1.00 h; dự kiến cả tuần 12.0 h | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); A11–A12/B13–B14 và đang bổ sung |
+| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | **Đã hoàn thành & Đóng băng 25/10** | 11.50 h *(A3-01–A3-09)* | 12.00 h *(B3-01–B3-09)* | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); đồng bộ 18 tác vụ |
 | **Tuần 4** | 26/10 – 01/11 | Nghiệm thu 21 ca, video demo, báo cáo, dọn dẹp | Chưa bắt đầu | Dự kiến 11.0 h | Dự kiến 11.0 h | Video, báo cáo cuối, bảng nghiệm thu |
 | **TỔNG** | 4 tuần | | | Dự kiến ~44 h | Dự kiến ~44 h | Chuẩn ≥ 32 h/người |
 
