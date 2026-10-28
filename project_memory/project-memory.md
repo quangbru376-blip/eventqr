@@ -1,6 +1,6 @@
 # MEMORY DỰ ÁN — EventQR (Cloud, nhóm Domain Apps)
 
-Cập nhật lần cuối: thứ Tư 14/10/2026 (giờ Việt Nam).
+Cập nhật lần cuối: thứ Tư 28/10/2026 (giờ Việt Nam).
 Tài liệu hướng dẫn cách đọc memory và ghi nhận thao tác của agent: xem [agent.md](file:///c:/Study/CLCO/final_workplace/eventqr/project_memory/agent.md).
 Kế hoạch chi tiết 4 tuần dạng checklist: xem [roadmap.md](file:///c:/Study/CLCO/final_workplace/eventqr/project_memory/roadmap.md).
 
@@ -249,51 +249,65 @@ Mỗi dòng: ngày, người làm, việc đã làm, số giờ thật, có AI h
 - Rủi ro lớn nhất về tiền: Lambda tự kích hoạt lại chính nó (ví dụ S3 event trên bucket mà Lambda đó ghi vào), hoặc retry vô hạn. Đặt reserved concurrency thấp và timeout hợp lý.
 - Phiên lab thường kéo dài khoảng 4 giờ rồi hết hạn; credentials đổi mỗi lần Start Lab nên phải cập nhật cho CLI và Postman. Learner Lab có thể thay đổi chính sách theo từng khóa; đối chiếu với trang lab.
 
-## 11. Điều đã kiểm chứng vs Chưa kiểm chứng
+## 11. Điều đã kiểm chứng vs Chưa kiểm chứng (Cập nhật Tuần 3)
 
-### Đã kiểm chứng trên Learner Lab (Tuần 1):
+### Đã kiểm chứng (Cập nhật 28/10/2026):
 - LabRole đọc được Secrets Manager qua `GetSecretValue` (đã test thành công với `eventqr-test-secret`).
 - DynamoDB `UpdateItem` có điều kiện chống trùng vé hoạt động chính xác (200 lần đầu, 409 `ConditionalCheckFailedException` lần hai).
 - SNS topic Standard + filter policy theo email gửi đúng người nhận.
 - Module HMAC-SHA256 chuẩn (`hmac_utils.py`) pass 7/7 ca kiểm thử.
 - Camera điện thoại mở được qua giao thức HTTPS.
 - Giảng viên đồng ý với kiến trúc serverless không cần VPC và hiện trạng của dự án.
+- Đã chọn thư viện sinh mã QR: `segno` (1.6.6) đóng gói kèm ZIP `dist/eventqr-generate-qr.zip`.
+- Giao diện web: Đã hoàn thiện 4 trang thuần HTML/JS (`register.html`, `ticket.html`, `checkin.html`, `stats.html`) kèm `config.js` động, kiểm tra cú pháp JS pass.
+- Đã build 8 gói ZIP Lambda hoàn chỉnh trong `dist/`, kiểm thử giả lập đạt 38/38 unit tests (23 bộ A + 15 bộ B) và 7/7 HMAC.
+- Người dùng đã hoàn thành toàn bộ các thiết lập (setup) tài nguyên và triển khai của Tuần 2 trên AWS Console.
 
-### Chưa kiểm chứng hoặc đang theo dõi:
-- Presigned URL của S3 ký bằng credentials tạm của LabRole có còn dùng được khi phiên lab hết hạn hay không (ảnh `testlink6h.png` đã có, cần chốt kết quả bài thử 5 để chọn mode `presigned` hay `inline` cho `GET /ticket`).
-- Tạo Distribution CloudFront với Origin Access Control (OAC) trên tài khoản chính.
-- Tạo API Key và Usage Plan trong API Gateway trên Learner Lab.
+### Chưa kiểm chứng hoặc đang hoàn tất trong Tuần 3:
+- Presigned URL ngắn hạn 300 giây đã được chọn trong `get-ticket` để tránh URL chết khi phiên lab hết hạn; bài thử URL 6 giờ của tuần 1 chỉ giữ tính tham khảo.
+- Cấu hình API Key `eventqr-organizer-key` & Usage Plan bảo vệ 3 route ban tổ chức (`/events`, `/checkin`, `/stats`) và Gateway Responses (CORS cho lỗi 403, 429).
+- Kiểm chứng thực tế camera quét QR trên điện thoại thật (iOS Safari / Android Chrome) qua HTTPS của hệ thống chính.
+- Kiểm chứng dứt điểm luồng gửi email vé SNS thật khi người dùng Confirm và Resend.
+- CloudWatch: Log retention 7 ngày cho toàn bộ 8 log groups, tạo Dashboard `eventqr-dashboard` và 2 Alarms (`eventqr-checkin-errors`, `eventqr-register-errors`).
 
 ## 12. Việc còn mở
 
-- **Kỹ thuật:** Chọn thư viện sinh ảnh QR trong Lambda `eventqr-generate-qr` (`segno` hoặc `qrcode` đóng gói Lambda layer).
-- **Frontend:** Xây dựng 4 giao diện web HTML/CSS/JS thuần (`register.html`, `ticket.html`, `checkin.html`, `stats.html`).
-- **Nghiệm thu:** Tiến hành 21 ca kiểm thử theo `docs/api.md` vào tuần 4.
+- **Hạ tầng & Giám sát Tuần 3:**
+  - Hoàn tất cấu hình CloudWatch (đổi retention 7 ngày cho 8 log groups, dashboard `eventqr-dashboard`, 2 alarms).
+  - Thu thập trọn bộ ảnh minh chứng có Account ID, Region `us-east-1`, giờ hệ thống cho luồng quét điện thoại và CloudWatch.
+- **Tuần 4 (Nghiệm thu & Đóng gói):**
+  - Thực hiện 21 ca kiểm thử nghiệm thu theo [`docs/api.md`](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/api.md).
+  - Soạn kịch bản và quay video demo $\le 10$ phút.
+  - Báo cáo chi phí AWS Cost Explorer / Billing và hoàn thiện hồ sơ nộp bài.
 
 ## 13. Tài liệu đã tạo
 
-- `naming.md`: quy ước đặt tên và tag (tại [docs/naming.md](file:///c:/Study/CLCO/final_workplace/eventqr/docs/naming.md)).
-- `api.md`: đặc tả API v0.2 đầy đủ (tại [docs/api.md](file:///c:/Study/CLCO/final_workplace/eventqr/docs/api.md)).
-- `plan.md`: kế hoạch 4 tuần và bảng theo dõi tiến độ cập nhật hàng tuần (tại [docs/plan.md](file:///c:/Study/CLCO/final_workplace/eventqr/docs/plan.md)).
-- `architecture.md`: kiến trúc hệ thống và sơ đồ (tại [docs/evidence/week1/architecture.md](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week1/architecture.md)).
+- `naming.md`: quy ước đặt tên và tag (tại [docs/naming.md](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/naming.md)).
+- `api.md`: đặc tả API v0.2 đầy đủ (tại [docs/api.md](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/api.md)).
+- `plan.md`: kế hoạch 4 tuần và bảng theo dõi tiến độ cập nhật hàng tuần (tại [docs/plan.md](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/plan.md)).
+- `architecture.md`: kiến trúc hệ thống và sơ đồ (tại [docs/evidence/week1/architecture.md](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/evidence/week1/architecture.md)).
 - `worklog/week1/worklog_markdown.md`: nhật ký công việc tuần 1 (Quang 9.75h, Long 9.2h).
+- `worklog/week2/worklog_markdown.md`: nhật ký công việc tuần 2 (Quang 8.25h, Long 10.50h — Hoàn thành 100% mục tiêu tuần 2).
+- `worklog/week3/worklog_markdown.md`: nhật ký công việc tuần 3 (đã ghi nhận bước đầu ngày 19/10 và đang bổ sung).
 - `project_memory/agent.md`: hướng dẫn vận hành và giao thức ghi nhận dành cho AI Agent.
 - `project_memory/roadmap.md`: kế hoạch hành động 4 tuần chi tiết từng ngày.
+- `docs/WEEK2-STATUS.md`: báo cáo trạng thái hoàn thiện mã nguồn và kiểm thử tuần 2.
 
-## 14. Trạng thái hiện tại (Cập nhật 14/10/2026)
+## 14. Trạng thái hiện tại (Cập nhật 28/10/2026)
 
-- **Tuần 1 (05–11/10):** Đã hoàn thành phần lớn (Quang: 9.75h, Long: 9.2h). 
-  - Báo cáo Tuần 1 nộp lại theo quy định (không đính kèm file, nội dung và link nằm trên GitHub).
-  - Còn 3 tồn đọng chuyển sang tuần 2: (1) Presigned URL 6 giờ chưa xong; (2) Log retention 7 ngày cần xác nhận; (3) Thử camera điện thoại thật.
-- **Tuần 2 (12–18/10):** Đang thực hiện. Hôm nay là thứ Tư (14/10/2026).
-  - Đã chốt phương án ghép hai tài khoản: chạy hệ thống đầu-cuối trên tài khoản Quang từ Thứ 4 (14/10).
-  - Nhiệm vụ trọng tâm hiện tại: Triển khai các hàm Lambda tuần 2 (`create-event`, `generate-qr`, `register`, `ticket.html`/`register.html`).
-- **Thành viên:** Đặng Duy Quang (A - Lead, tài khoản chính) và Trương Hoàng Long (B).
+- **Tuần 1 (05–11/10):** Đã hoàn thành 100% (Quang: 9.75h, Long: 9.2h). Báo cáo đã nộp lại theo quy định.
+- **Tuần 2 (12–18/10):** **ĐÃ HOÀN THÀNH 100%.**
+  - Người dùng đã hoàn thành toàn bộ công việc setup của tuần 2.
+  - Mã nguồn 8 hàm Lambda và 4 trang frontend đã hoàn tất trong repo, 38/38 unit test local pass, 7/7 test HMAC pass. Đã build 8 gói ZIP.
+  - Giờ làm việc tuần 2: Quang 8.25h, Long 10.50h (cả 2 đều $\ge 8$h).
+- **Tuần 3 (19–25/10):** **ĐANG HOÀN TẤT & CHUẨN BỊ ĐÓNG BĂNG.**
+  - Trọng tâm còn lại: Cấu hình CloudWatch (Retention 7 ngày, `eventqr-dashboard`, 2 Alarms), kiểm thử camera điện thoại thật qua HTTPS và kiểm chứng gửi email SNS.
+  - Sau khi xong các bài thử trên sẽ chốt **Đóng băng tính năng (Feature Freeze)** để chuyển sang Tuần 4.
+- **Tuần 4 (26/10–01/11):** Chuẩn bị chạy nghiệm thu 21 test case, quay video demo $\le 10$ phút và hoàn thiện báo cáo chi phí.
 
 ## 15. Trợ lý mới nên làm tiếp
 
-1. Đọc [docs/plan.md](file:///c:/Study/CLCO/final_workplace/eventqr/docs/plan.md) và [project_memory/agent.md](file:///c:/Study/CLCO/final_workplace/eventqr/project_memory/agent.md).
-2. Kiểm tra tiến độ ngày hiện tại của Tuần 2 theo kế hoạch:
-   - Viết Lambda `eventqr-create-event` cho Quang trong `lambdas/create_event/` (nhận name, startTime, venue; lưu vào DynamoDB `eventqr-events`).
-   - Cung cấp khung mã và hướng dẫn gói layer cho Lambda `eventqr-generate-qr` của Long trong `lambdas/generate_qr/`.
-3. Sau khi hoàn thành code và kiểm thử, áp dụng **Giao thức ghi nhận thao tác (Write-back Protocol)** trong `agent.md` để cập nhật `worklog/` và `docs/plan.md`.
+1. Đọc [`docs/plan.md`](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/plan.md), [`project_memory/agent.md`](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/project_memory/agent.md) và [`project_memory/project-memory.md`](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/project_memory/project-memory.md).
+2. Hướng dẫn và đồng hành cùng người dùng hoàn tất các thao tác CloudWatch (Retention 7 ngày, Dashboard, 2 Alarms) và kiểm thử camera điện thoại thật.
+3. Hỗ trợ người dùng rà soát 21 ca nghiệm thu theo [`docs/api.md`](file:///c:/Users/LongHoang/Documents/GitHub/eventqr/docs/api.md) để chuẩn bị kịch bản quay video demo.
+4. Cập nhật `worklog/week3/worklog_markdown.md` để đảm bảo số giờ của Quang và Long đạt $\ge 8$h cho tuần 3 theo đúng Write-back Protocol.

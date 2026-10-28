@@ -14,9 +14,9 @@
 
 ```
 Tuần 1 (05–11/10): Nền tảng, thiết kế & bài thử rủi ro   [100% HOÀN THÀNH]
-Tuần 2 (12–18/10): Chức năng lõi & Kiểm thử thành phần     [ĐANG THỰC HIỆN - HÔM NAY 13/10]
-Tuần 3 (19–25/10): Tích hợp, bảo mật, giám sát            [CHƯA BẮT ĐẦU - ĐÓNG BĂNG 25/10]
-Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT ĐẦU - DỌN DẸP 01/11]
+Tuần 2 (12–18/10): Chức năng lõi & Kiểm thử thành phần     [100% HOÀN THÀNH - SETUP & MÃ NGUỒN XONG]
+Tuần 3 (19–25/10): Tích hợp, bảo mật, giám sát            [ĐANG THỰC HIỆN - CLOUDWATCH & TEST ĐIỆN THOẠI]
+Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT ĐẦU - CHUẨN BỊ KỊCH BẢN]
 ```
 
 ---
@@ -53,7 +53,7 @@ Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT
 ---
 
 ## TUẦN 2: CHỨC NĂNG LÕI & KIỂM THỬ TỪNG THÀNH PHẦN (12/10 – 18/10/2026)
-*Trạng thái: Đang thực hiện. Mục tiêu: Toàn bộ 7 Lambda hoạt động và giao diện web cơ bản hoàn thiện.*
+*Trạng thái: Hoàn thành 100%. Đã ghép 8 Lambda, 4 trang frontend, build 8 gói ZIP, đạt 38/38 unit test local.*
 
 ### Phân công theo ngày:
 
@@ -61,73 +61,73 @@ Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT
 - [x] **A (Quang - 1.5h):** Đồng bộ tài liệu [`docs/api.md`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/api.md) vào repo, chuẩn bị các hàm tiện ích DynamoDB dùng chung.
 - [x] **B (Long - 1.5h):** Nghiên cứu thư viện sinh mã QR nhẹ thuần Python (`segno` hoặc `qrcode`), thống nhất hợp đồng gọi giữa `register` và `generate-qr`.
 
-#### Thứ Ba (13/10/2026) — Sự kiện & Sinh QR [HÔM NAY]
-- [ ] **A (Quang - 2.0h):** Viết Lambda `eventqr-create-event`:
+#### Thứ Ba (13/10/2026) — Sự kiện & Sinh QR
+- [x] **A (Quang - 2.0h):** Viết Lambda `eventqr-create-event`:
   - Input: `{name, startTime, venue}` (yêu cầu header `x-api-key`).
   - Sinh `eventId` UUID, ghi vào `eventqr-events`.
   - Viết test payload kiểm tra phản hồi 201 và các mã lỗi 400.
-- [ ] **B (Long - 2.0h):** Viết Lambda `eventqr-generate-qr`:
+- [x] **B (Long - 2.0h):** Viết Lambda `eventqr-generate-qr`:
   - Input: `{eventId, ticketId}` (Invoke đồng bộ từ `register`).
   - Đọc khóa HMAC từ Secrets Manager (cache vào bộ nhớ).
   - Ký chuỗi `v1.<eventId>.<ticketId>`, sinh ảnh QR PNG và đẩy vào bucket `eventqr-qr`. Trả về `{qrKey}`.
 
 #### Thứ Tư (14/10/2026) — Đăng ký & Giao diện xem vé
-- [ ] **A (Quang - 2.0h):** Viết mô-đun `ticket_mail.py` và bắt đầu Lambda `eventqr-register`:
+- [x] **A (Quang - 2.0h):** Viết mô-đun `ticket_mail.py` và bắt đầu Lambda `eventqr-register`:
   - Input: `{eventId, name, email}`.
   - Kiểm tra sự kiện tồn tại trong DynamoDB `eventqr-events`.
   - Sinh `ticketId` UUID, gọi đồng bộ `generate-qr`.
-- [ ] **B (Long - 2.0h):** Thiết kế giao diện HTML/CSS/JS thuần:
+- [x] **B (Long - 2.0h):** Thiết kế giao diện HTML/CSS/JS thuần:
   - `register.html`: Form đăng ký sự kiện, hiển thị thông báo và link vé trực tiếp.
   - `ticket.html`: Trang hiển thị chi tiết vé và hình ảnh mã QR.
 
 #### Thứ Năm (15/10/2026) — Ghi nhận vé, Check-in & Lấy vé
-- [ ] **A (Quang - 2.0h):** Hoàn thiện Lambda `eventqr-register` và viết Lambda `eventqr-checkin`:
+- [x] **A (Quang - 2.0h):** Hoàn thiện Lambda `eventqr-register` và viết Lambda `eventqr-checkin`:
   - `register`: Ghi item vào `eventqr-tickets` (`status=ISSUED`, `attribute_not_exists`), kích hoạt gửi vé qua SNS.
   - `checkin`: Nhận `{payload, eventId}`, xác thực HMAC (`compare_digest`), cập nhật DynamoDB `status=ISSUED -> CHECKED_IN`.
-- [ ] **B (Long - 2.0h):** Viết Lambda `eventqr-get-ticket` và `eventqr-resend`:
+- [x] **B (Long - 2.0h):** Viết Lambda `eventqr-get-ticket` và `eventqr-resend`:
   - `get-ticket`: Nhận `eventId`, `ticketId`, kiểm tra DB, trả presigned URL ảnh QR (hoặc ảnh inline base64).
   - `resend`: Gửi lại email vé qua SNS khi người dùng yêu cầu.
 
 #### Thứ Sáu (16/10/2026) — Thống kê & Giao diện Check-in
-- [ ] **A (Quang - 1.5h):** Viết Lambda `eventqr-stats`:
+- [x] **A (Quang - 1.5h):** Viết Lambda `eventqr-stats`:
   - `GET /stats/{eventId}`: Query các vé trong `eventqr-tickets` theo `eventId`, đếm tổng vé, đã check-in, chưa check-in.
   - Cấu hình 6 route lên API Gateway cá nhân của Quang.
-- [ ] **B (Long - 1.5h):** Hoàn thiện giao diện:
+- [x] **B (Long - 1.5h):** Hoàn thiện giao diện:
   - `checkin.html`: Tích hợp camera quét QR (dùng thư viện nhẹ `html5-qrcode` qua CDN/local JS), gọi API check-in kèm `x-api-key`.
   - `stats.html`: Dashboard hiển thị số lượng vé trực quan.
 
 #### Thứ Bảy (17/10/2026) — Kiểm thử thành phần độc lập
-- [ ] **A (Quang - 1.0h):** Test trọn vẹn 6 route qua Postman/curl trên API Gateway của A, lưu kết quả response làm minh chứng.
-- [ ] **B (Long - 1.0h):** Test giao diện web trên môi trường localhost nối với API Gateway của B, kiểm tra hiển thị QR trên điện thoại.
+- [x] **A (Quang - 1.0h):** Test trọn vẹn 6 route qua Postman/curl trên API Gateway của A, lưu kết quả response làm minh chứng.
+- [x] **B (Long - 1.0h):** Test giao diện web trên môi trường localhost nối với API Gateway của B, kiểm tra hiển thị QR trên điện thoại.
 
 #### Chủ Nhật (18/10/2026) — Giải thích chéo, Đồng bộ Git & Báo cáo
-- [ ] **A (Quang - 1.5h):** Giải thích chéo mã nguồn cho Long (30–45p). Cập nhật `worklog/week2/worklog_markdown.md`, viết Báo cáo tuần 2.
-- [ ] **B (Long - 1.5h):** Giải thích chéo frontend và SNS cho Quang (30–45p). Push toàn bộ mã lên GitHub. Cập nhật worklog tuần 2, viết Báo cáo tuần 2.
+- [x] **A (Quang - 1.5h):** Giải thích chéo mã nguồn cho Long (30–45p). Cập nhật `worklog/week2/worklog_markdown.md`, viết Báo cáo tuần 2.
+- [x] **B (Long - 1.5h):** Giải thích chéo frontend và SNS cho Quang (30–45p). Push toàn bộ mã lên GitHub. Cập nhật worklog tuần 2, viết Báo cáo tuần 2.
 
-**Mục tiêu giờ Tuần 2:** Quang: 11.5h | Long: 11.5h (Đạt chuẩn $\ge 8$h).
+**Tổng kết giờ Tuần 2:** Quang: 8.25h | Long: 10.50h (Đạt chuẩn $\ge 8$h).
 
 ---
 
 ## TUẦN 3: TÍCH HỢP TOÀN HỆ THỐNG, BẢO MẬT & GIÁM SÁT (19/10 – 25/10/2026)
-*Trạng thái: Chưa bắt đầu. Mục tiêu: Chạy toàn bộ trên tài khoản chính của Quang; Đóng băng tính năng vào 23:59 ngày 25/10.*
+*Trạng thái: Đang thực hiện. Mục tiêu: Chạy toàn bộ trên tài khoản chính của Quang; Đóng băng tính năng vào 23:59 ngày 25/10.*
 
 ### Phân công theo ngày:
 
 #### Thứ Hai (19/10/2026) — Triển khai hạ tầng Tài khoản chính
-- [ ] **A (Quang - 2.0h):** Đồng bộ tạo toàn bộ tài nguyên trên tài khoản AWS chính: 2 bảng DynamoDB, secret HMAC, 7 hàm Lambda (lấy code từ Git).
-- [ ] **B (Long - 1.5h):** Dựng 2 S3 bucket trên tài khoản chính (`eventqr-qr-<AccountID>`, `eventqr-web-<AccountID>`), topic SNS `eventqr-ticket-delivery`.
+- [x] **A (Quang - 2.0h):** Đồng bộ tạo toàn bộ tài nguyên trên tài khoản AWS chính: 2 bảng DynamoDB, secret HMAC, 7 hàm Lambda (lấy code từ Git).
+- [x] **B (Long - 1.5h):** Dựng 2 S3 bucket trên tài khoản chính (`eventqr-qr-<AccountID>`, `eventqr-web-<AccountID>`), topic SNS `eventqr-ticket-delivery`.
 
 #### Thứ Ba (20/10/2026) — Cấu hình API Gateway & Hosting Web
-- [ ] **A (Quang - 2.0h):** Dựng API Gateway `eventqr-api` (stage `v1`) trên tài khoản chính: ánh xạ 6 route tới 6 Lambda, cấu hình CORS chuẩn.
-- [ ] **B (Long - 2.0h):** Triển khai giao diện web lên S3/CloudFront (hoặc Lambda web HTTPS). Thiết lập file `config.js` động trỏ về API Gateway chính.
+- [x] **A (Quang - 2.0h):** Dựng API Gateway `eventqr-api` (stage `v1`) trên tài khoản chính: ánh xạ 6 route tới 6 Lambda, cấu hình CORS chuẩn.
+- [x] **B (Long - 2.0h):** Triển khai giao diện web lên S3/Lambda web HTTPS. Thiết lập file `config.js` động trỏ về API Gateway chính.
 
 #### Thứ Tư (21/10/2026) — Bảo mật & Throttling
-- [ ] **A (Quang - 1.5h):** Cấu hình bảo mật API: Tạo API Key `eventqr-organizer-key`, Usage Plan gắn throttling (Rate: 50, Burst: 100), khóa bảo vệ route `/events`, `/checkin`, `/stats`.
-- [ ] **B (Long - 2.0h):** Tích hợp quét camera trên điện thoại thật qua HTTPS của hệ thống chính; kiểm thử truyền API Key trong header `x-api-key`.
+- [x] **A (Quang - 1.5h):** Cấu hình bảo mật API: Tạo API Key `eventqr-organizer-key`, Usage Plan gắn throttling (Rate: 50, Burst: 100), khóa bảo vệ route `/events`, `/checkin`, `/stats`.
+- [ ] **B (Long - 2.0h):** Tích hợp quét camera trên điện thoại thật qua HTTPS của hệ thống chính; kiểm thử truyền API Key trong header `x-api-key`. [ĐANG THỰC HIỆN]
 
 #### Thứ Năm (22/10/2026) — Kiểm thử tích hợp luồng đầu - cuối (End-to-End)
 - [ ] **A (Quang - 1.5h):** Kiểm tra dữ liệu ghi nhận trong DynamoDB và Secrets Manager khi luồng đăng ký -> gửi email -> check-in chạy thật.
-- [ ] **B (Long - 2.0h):** Thiết lập CloudWatch: Tạo dashboard `eventqr-dashboard` giám sát invocations/lỗi Lambda, tạo 2 CloudWatch Alarms cảnh báo lỗi 5xx.
+- [ ] **B (Long - 2.0h):** Thiết lập CloudWatch: Đổi retention 7 ngày, tạo dashboard `eventqr-dashboard` giám sát invocations/lỗi Lambda, tạo 2 CloudWatch Alarms cảnh báo lỗi 5xx. [ĐANG THỰC HIỆN]
 
 #### Thứ Sáu (23/10/2026) — Rà soát phi chức năng & IaC
 - [ ] **A (Quang - 1.5h):** Kiểm tra giới hạn reserved concurrency của Lambda, rà soát tránh lỗi retry vô tận gây cạn kinh phí 50 USD.

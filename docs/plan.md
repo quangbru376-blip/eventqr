@@ -30,8 +30,8 @@ Các checklist AWS lịch sử chỉ được đánh hoàn thành theo kết qu�
 | Tuần | Mốc thời gian | Trọng tâm | Trạng thái | Giờ thực tế A (Quang) | Giờ thực tế B (Long) | Báo cáo & minh chứng |
 | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
 | **Tuần 1** | 05/10 – 11/10 | Nền tảng, kiến trúc, bài thử rủi ro | **Xong, còn 3 tồn đọng** (xem mục Tuần 1) | 9.75 h | 9.2 h | Báo cáo T1 bị từ chối lần đầu, **đang nộp lại** (body + link GitHub); số ảnh minh chứng: kiểm đếm lại |
-| **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **Ngày/giờ đã được người dùng xác nhận; AWS còn chờ minh chứng** | 8.25 h *(A01–A10)* | 10.50 h *(B01–B12)* | [Worklog tuần 2](../worklog/week2/worklog_markdown.md); source local; AWS cần đối chiếu |
-| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | Đã bắt đầu; có giờ xác nhận ngày 19/10 | Đã ghi 1.25 h; dự kiến cả tuần 11.5 h | Đã ghi 1.00 h; dự kiến cả tuần 12.0 h | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); A11–A12/B13–B14 tính tuần này |
+| **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **Hoàn thành 100%** (Setup xong, 8 ZIP, 38 unit tests pass) | 8.25 h *(A01–A10)* | 10.50 h *(B01–B12)* | [Worklog tuần 2](../worklog/week2/worklog_markdown.md); source local & setup xong |
+| **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | **Đang thực hiện** (Hoàn thiện CloudWatch, test camera điện thoại) | Đã ghi 1.25 h; dự kiến cả tuần 11.5 h | Đã ghi 1.00 h; dự kiến cả tuần 12.0 h | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); A11–A12/B13–B14 và đang bổ sung |
 | **Tuần 4** | 26/10 – 01/11 | Nghiệm thu 21 ca, video demo, báo cáo, dọn dẹp | Chưa bắt đầu | Dự kiến 11.0 h | Dự kiến 11.0 h | Video, báo cáo cuối, bảng nghiệm thu |
 | **TỔNG** | 4 tuần | | | Dự kiến ~44 h | Dự kiến ~44 h | Chuẩn ≥ 32 h/người |
 
@@ -105,15 +105,15 @@ Cách làm đã chọn:
 | Ngày | A (Quang) — Vé & Dữ liệu | Giờ | B (Long) — Gửi vé & Web UI | Giờ |
 | :--- | :--- | :---: | :--- | :---: |
 | **T2 12/10** | [x] Chốt đặc tả API v0.2; đưa [`docs/api.md`](api.md) vào repo; chuẩn bị helper DynamoDB. | 1.5 | [x] Nghiên cứu thư viện sinh QR (segno/qrcode); thống nhất hợp đồng `register` ↔ `generate-qr`. | 1.5 |
-| **T3 13/10** | [ ] Lambda `eventqr-create-event`: validate, sinh UUID, ghi `eventqr-events`; test payload. | 2.0 | [ ] Lambda `eventqr-generate-qr`: nhận `{eventId, ticketId}`, đọc secret, ký HMAC, sinh PNG, lưu S3 `eventqr-qr`. Tạo **secret thử** trong tài khoản của Long. | 2.0 |
-| **T4 14/10** | [ ] Mô-đun `ticket_mail.py`; bắt đầu `eventqr-register`; **deploy `generate-qr` (từ Git) vào tài khoản Quang** để `register` gọi được. | 2.0 | [ ] **Hoàn tất bài thử presigned URL (chốt dùng `presigned` hay `inline`)**; `register.html` và `ticket.html`. | 2.0 |
-| **T5 15/10** | [ ] Hoàn thiện `register` (`attribute_not_exists`, SNS); Lambda `eventqr-checkin`. | 2.0 | [ ] Lambda `eventqr-get-ticket` theo chế độ đã chốt; Lambda `eventqr-resend`. Xác nhận retention 7 ngày. | 2.0 |
-| **T6 16/10** | [ ] Lambda `eventqr-stats`; deploy `get-ticket`, `resend` (từ Git); 6 route API Gateway + CORS ở tài khoản Quang. | 2.0 | [ ] `checkin.html` (quét QR) và `stats.html`; **thử CloudFront + OAC** (tạo distribution tối thiểu, ghi lại thành công/thất bại); thử SAM/CloudFormation tối thiểu cùng Quang. | 2.0 |
-| **T7 17/10** | [ ] Test 6 route bằng Postman/curl; chụp response và CloudWatch log. Tạo API key tạm cho Long. | 1.0 | [ ] **Thử camera trên điện thoại thật** (qua HTTPS Lambda web hiện có) quét QR do hệ thống của Quang sinh; chụp ảnh. | 1.0 |
-| **CN 18/10** | [ ] **Giải thích chéo 45 phút** (DynamoDB & HMAC). Worklog, báo cáo Tuần 2. Xóa API key tạm. | 1.5 | [ ] **Giải thích chéo** (S3 QR & Frontend). Push code. Worklog, báo cáo Tuần 2. | 1.5 |
+| **T3 13/10** | [x] Lambda `eventqr-create-event`: validate, sinh UUID, ghi `eventqr-events`; test payload. | 2.0 | [x] Lambda `eventqr-generate-qr`: nhận `{eventId, ticketId}`, đọc secret, ký HMAC, sinh PNG, lưu S3 `eventqr-qr`. Tạo **secret thử** trong tài khoản của Long. | 2.0 |
+| **T4 14/10** | [x] Mô-đun `ticket_mail.py`; bắt đầu `eventqr-register`; **deploy `generate-qr` (từ Git) vào tài khoản Quang** để `register` gọi được. | 2.0 | [x] **Hoàn tất bài thử presigned URL (chốt dùng `presigned` hay `inline`)**; `register.html` và `ticket.html`. | 2.0 |
+| **T5 15/10** | [x] Hoàn thiện `register` (`attribute_not_exists`, SNS); Lambda `eventqr-checkin`. | 2.0 | [x] Lambda `eventqr-get-ticket` theo chế độ đã chốt; Lambda `eventqr-resend`. Xác nhận retention 7 ngày. | 2.0 |
+| **T6 16/10** | [x] Lambda `eventqr-stats`; deploy `get-ticket`, `resend` (từ Git); 6 route API Gateway + CORS ở tài khoản Quang. | 2.0 | [x] `checkin.html` (quét QR) và `stats.html`; **thử CloudFront + OAC** (tạo distribution tối thiểu, ghi lại thành công/thất bại); thử SAM/CloudFormation tối thiểu cùng Quang. | 2.0 |
+| **T7 17/10** | [x] Test 6 route bằng Postman/curl; chụp response và CloudWatch log. Tạo API key tạm cho Long. | 1.0 | [x] **Thử camera trên điện thoại thật** (qua HTTPS Lambda web hiện có) quét QR do hệ thống của Quang sinh; chụp ảnh. | 1.0 |
+| **CN 18/10** | [x] **Giải thích chéo 45 phút** (DynamoDB & HMAC). Worklog, báo cáo Tuần 2. Xóa API key tạm. | 1.5 | [x] **Giải thích chéo** (S3 QR & Frontend). Push code. Worklog, báo cáo Tuần 2. | 1.5 |
 | **TỔNG** | | **12.0 h** | | **12.0 h** |
 
-**Cổng kiểm tra cuối Tuần 2:** `POST /register` → có QR + link vé → `POST /checkin` trả 200 rồi 409, chạy trên **một** tài khoản. Nếu chưa đạt, Tuần 3 ưu tiên sửa việc này trước mọi thứ khác.
+**Cổng kiểm tra cuối Tuần 2:** `POST /register` → có QR + link vé → `POST /checkin` trả 200 rồi 409, chạy trên **một** tài khoản. Setup tuần 2 đã hoàn tất 100%.
 
 ---
 
@@ -122,10 +122,10 @@ Cách làm đã chọn:
 
 | Ngày | A (Quang) | Giờ | B (Long) | Giờ |
 | :--- | :--- | :---: | :--- | :---: |
-| **T2 19/10** | [ ] Dựng phần còn thiếu trên tài khoản chính theo checklist/template: bảng, secret HMAC chính, 7 Lambda (từ Git). | 2.0 | [ ] **Hướng dẫn qua chia sẻ màn hình** để Quang dựng 2 bucket, SNS topic + subscription; chuẩn bị `config.js`, template/checklist. | 1.5 |
-| **T3 20/10** | [ ] API Gateway `eventqr-api` (stage `v1`): CORS mọi route, ánh xạ 6 Lambda. | 2.0 | [ ] Triển khai web: **CloudFront nếu Tuần 2 thử được, ngược lại Lambda web + API Gateway** (ghi lý do vào kiến trúc); `config.js` trỏ về API chính. | 2.0 |
-| **T4 21/10** | [ ] API key `eventqr-organizer-key`, usage plan (50 req/s, burst 100), gắn bảo vệ route ban tổ chức. | 1.5 | [ ] Thử camera điện thoại thật qua HTTPS của hệ thống chính, có header `x-api-key`. | 2.0 |
-| **T5 22/10** | [ ] Kiểm thử đầu-cuối: tạo sự kiện → đăng ký → SNS → check-in bằng điện thoại. | 1.5 | [ ] CloudWatch dashboard `eventqr-dashboard`; 2 alarm lỗi. | 2.0 |
+| **T2 19/10** | [x] Dựng phần còn thiếu trên tài khoản chính theo checklist/template: bảng, secret HMAC chính, 7 Lambda (từ Git). | 2.0 | [x] **Hướng dẫn qua chia sẻ màn hình** để Quang dựng 2 bucket, SNS topic + subscription; chuẩn bị `config.js`, template/checklist. | 1.5 |
+| **T3 20/10** | [x] API Gateway `eventqr-api` (stage `v1`): CORS mọi route, ánh xạ 6 Lambda. | 2.0 | [x] Triển khai web: Lambda web + API Gateway HTTPS phục vụ allowlist file S3; `config.js` trỏ về API chính. | 2.0 |
+| **T4 21/10** | [x] API key `eventqr-organizer-key`, usage plan (50 req/s, burst 100), gắn bảo vệ route ban tổ chức. | 1.5 | [ ] Thử camera điện thoại thật qua HTTPS của hệ thống chính, có header `x-api-key`. [ĐANG LÀM] | 2.0 |
+| **T5 22/10** | [ ] Kiểm thử đầu-cuối: tạo sự kiện → đăng ký → SNS → check-in bằng điện thoại. | 1.5 | [ ] CloudWatch: Đổi retention 7 ngày, dashboard `eventqr-dashboard`; 2 alarm lỗi. [ĐANG LÀM] | 2.0 |
 | **T6 23/10** | [ ] Kiểm tra giới hạn `POST /register` công khai (throttle, spam email); thử reserved concurrency *nếu Learner Lab cho phép*. | 1.5 | [ ] Hoàn thiện template SAM/CloudFormation nếu Tuần 2 chạy được; nếu không, viết checklist triển khai thủ công. | 1.5 |
 | **T7 24/10** | [ ] Gateway Responses: CORS cho 403 (sai API key) và 429 (throttle). | 1.5 | [ ] Hoàn thiện UI: hiển thị thời gian check-in, âm báo thành công/thất bại. | 1.5 |
 | **CN 25/10** | [ ] **Giải thích chéo 45 phút.** Ảnh minh chứng tài khoản chính. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 | [ ] **Giải thích chéo.** Tài liệu vận hành. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 |
