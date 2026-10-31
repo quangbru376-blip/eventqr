@@ -32,7 +32,7 @@ Các checklist AWS lịch sử chỉ được đánh hoàn thành theo kết qu�
 | **Tuần 1** | 05/10 – 11/10 | Nền tảng, kiến trúc, bài thử rủi ro | **Xong, còn 3 tồn đọng** (xem mục Tuần 1) | 9.75 h | 9.2 h | Báo cáo T1 bị từ chối lần đầu, **đang nộp lại** (body + link GitHub); số ảnh minh chứng: kiểm đếm lại |
 | **Tuần 2** | 12/10 – 18/10 | 7 Lambda, 4 trang web, ghép hai tài khoản, thử CloudFront và camera điện thoại | **Hoàn thành 100%** (Setup xong, 8 ZIP, 38 unit tests pass) | 8.25 h *(A01–A10)* | 10.50 h *(B01–B12)* | [Worklog tuần 2](../worklog/week2/worklog_markdown.md); source local & setup xong |
 | **Tuần 3** | 19/10 – 25/10 | Triển khai tài khoản chính, HTTPS, bảo mật, giám sát; đóng băng 25/10 | **Đã hoàn thành & Đóng băng 25/10** | 11.50 h *(A3-01–A3-09)* | 12.00 h *(B3-01–B3-09)* | [Worklog tuần 3](../worklog/week3/worklog_markdown.md); đồng bộ 18 tác vụ |
-| **Tuần 4** | 26/10 – 01/11 | Nghiệm thu 21 ca, video demo, báo cáo, dọn dẹp | Chưa bắt đầu | Dự kiến 11.0 h | Dự kiến 11.0 h | Video, báo cáo cuối, bảng nghiệm thu |
+| **Tuần 4** | 26/10 – 01/11 | Nghiệm thu 21 ca, video demo, báo cáo, dọn dẹp | **Đang thực hiện** | Dự kiến 11.0 h | Dự kiến 11.0 h | Video, báo cáo cuối, bảng nghiệm thu |
 | **TỔNG** | 4 tuần | | | Dự kiến ~44 h | Dự kiến ~44 h | Chuẩn ≥ 32 h/người |
 
 ---
@@ -124,11 +124,11 @@ Cách làm đã chọn:
 | :--- | :--- | :---: | :--- | :---: |
 | **T2 19/10** | [x] Dựng phần còn thiếu trên tài khoản chính theo checklist/template: bảng, secret HMAC chính, 7 Lambda (từ Git). | 2.0 | [x] **Hướng dẫn qua chia sẻ màn hình** để Quang dựng 2 bucket, SNS topic + subscription; chuẩn bị `config.js`, template/checklist. | 1.5 |
 | **T3 20/10** | [x] API Gateway `eventqr-api` (stage `v1`): CORS mọi route, ánh xạ 6 Lambda. | 2.0 | [x] Triển khai web: Lambda web + API Gateway HTTPS phục vụ allowlist file S3; `config.js` trỏ về API chính. | 2.0 |
-| **T4 21/10** | [x] API key `eventqr-organizer-key`, usage plan (50 req/s, burst 100), gắn bảo vệ route ban tổ chức. | 1.5 | [ ] Thử camera điện thoại thật qua HTTPS của hệ thống chính, có header `x-api-key`. [ĐANG LÀM] | 2.0 |
-| **T5 22/10** | [ ] Kiểm thử đầu-cuối: tạo sự kiện → đăng ký → SNS → check-in bằng điện thoại. | 1.5 | [ ] CloudWatch: Đổi retention 7 ngày, dashboard `eventqr-dashboard`; 2 alarm lỗi. [ĐANG LÀM] | 2.0 |
-| **T6 23/10** | [ ] Kiểm tra giới hạn `POST /register` công khai (throttle, spam email); thử reserved concurrency *nếu Learner Lab cho phép*. | 1.5 | [ ] Hoàn thiện template SAM/CloudFormation nếu Tuần 2 chạy được; nếu không, viết checklist triển khai thủ công. | 1.5 |
-| **T7 24/10** | [ ] Gateway Responses: CORS cho 403 (sai API key) và 429 (throttle). | 1.5 | [ ] Hoàn thiện UI: hiển thị thời gian check-in, âm báo thành công/thất bại. | 1.5 |
-| **CN 25/10** | [ ] **Giải thích chéo 45 phút.** Ảnh minh chứng tài khoản chính. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 | [ ] **Giải thích chéo.** Tài liệu vận hành. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 |
+| **T4 21/10** | [x] API key `eventqr-organizer-key`, usage plan (50 req/s, burst 100), gắn bảo vệ route ban tổ chức. | 1.5 | [x] Thử camera điện thoại thật qua HTTPS của hệ thống chính, có header `x-api-key`. | 2.0 |
+| **T5 22/10** | [x] Kiểm thử đầu-cuối: tạo sự kiện → đăng ký → SNS → check-in bằng điện thoại. | 1.5 | [x] CloudWatch: Đổi retention 7 ngày, dashboard `eventqr-dashboard`; 2 alarm lỗi. | 2.0 |
+| **T6 23/10** | [x] Kiểm tra giới hạn `POST /register` công khai (throttle, spam email); thử reserved concurrency *nếu Learner Lab cho phép*. | 1.5 | [x] Hoàn thiện template SAM/CloudFormation nếu Tuần 2 chạy được; nếu không, viết checklist triển khai thủ công. | 1.5 |
+| **T7 24/10** | [x] Gateway Responses: CORS cho 403 (sai API key) và 429 (throttle). | 1.5 | [x] Hoàn thiện UI: hiển thị thời gian check-in, âm báo thành công/thất bại. | 1.5 |
+| **CN 25/10** | [x] **Giải thích chéo 45 phút.** Ảnh minh chứng tài khoản chính. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 | [x] **Giải thích chéo.** Tài liệu vận hành. Báo cáo Tuần 3. **ĐÓNG BĂNG.** | 1.5 |
 | **TỔNG** | | **11.5 h** | | **12.0 h** |
 
 ---

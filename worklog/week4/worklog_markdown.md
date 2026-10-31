@@ -1,0 +1,65 @@
+# CLCO_Final_Worklog — Tuần 4 (26/10 – 01/11/2026)
+
+**Môn:** Cloud Computing — **Thời gian:** 26/10 – 01/11/2026 (Asia/Saigon).  
+**Nhóm sinh viên:**
+- **Đặng Duy Quang (MSSV: 24110307)** — Vai trò A (Lead, Backend dữ liệu, API & Nghiệm thu)
+- **Trương Hoàng Long (MSSV: 24110273)** — Vai trò B (Gửi vé SNS, S3, Web UI, CloudWatch & Demo)
+
+---
+
+## 1. Thống kê tổng hợp Tuần 4
+
+Bảng tổng hợp tiến độ và thời gian thực hiện của các thành viên trong Tuần 4 (trọng tâm: nghiệm thu 21 ca kiểm thử theo đặc tả `api.md`, đo lường chi phí thực tế AWS, quay video demo $\le$ 10 phút và chuẩn bị kịch bản dọn dẹp tài nguyên).
+
+| Nhân sự | Vai trò | Số tác vụ | Hoàn thành | Đang xử lý | Tỷ lệ HT | Tổng số giờ | Giờ TB/Tác vụ |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Đặng Duy Quang** | A (Lead, Backend, Nghiệm thu 21 ca & Báo cáo) | 8 | 8 | 0 | 100% | 11,00 h | 1,38 h |
+| **Trương Hoàng Long** | B (Web UI, Audio Beep, Tái lập hạ tầng & Video Demo) | 8 | 8 | 0 | 100% | 11,50 h | 1,44 h |
+| **Tổng cộng** | | **16** | **16** | **0** | **100%** | **22,50 h** | **1,41 h** |
+
+*Ghi chú chuẩn hóa:* Cả hai thành viên đều hoàn thành vượt định mức $\ge 8$ giờ/tuần theo quy định môn học. Toàn bộ 21/21 ảnh minh chứng kiểm thử nghiệm thu thực tế đã được chụp và lưu trữ tập trung tại thư mục `docs/evidence/week4/` (`tc01.png` đến `tc21.png`).
+
+---
+
+## 2. Vai trò A — Backend, Nghiệm thu 21 ca & Báo cáo chi phí (Đặng Duy Quang)
+
+| Mã | Ngày thực hiện | Chi tiết công việc | Kết quả và mức xác nhận cập nhật | Giờ thực tế | Ghi chú và dẫn chứng |
+| :---: | :---: | :--- | :--- | :---: | :--- |
+| **A4-01** | 26/10/2026 | Rà soát toàn bộ 21 tình huống kiểm thử trong Mục 10 đặc tả `docs/api.md`; xây dựng kế hoạch kiểm thử chi tiết 4 luồng nghiệp vụ (`test-plan.md`) và bảng ma trận nghiệm thu (`test-matrix.md`). | Đã ban hành kế hoạch kiểm thử chi tiết và ma trận phân vai, quy chuẩn đặt tên ảnh `tc01.png` - `tc21.png`. | 1,50h | [Kế hoạch kiểm thử](../../project_memory/test-plan.md); [Ma trận 21 ca](../../project_memory/test-matrix.md) |
+| **A4-02** | 27/10/2026 | Thực hiện nghiệm thu Luồng 1 (Bảo mật API Gateway & Throttling): kiểm thử chặn 403 khi thiếu/sai API key (TC17), khởi tạo sự kiện cơ sở, kiểm tra thống kê ban đầu 0/0/0 (TC20), và chạy kiểm thử DoS Rate Limit kích hoạt 429 Too Many Requests (TC18). | Hoàn thành 3/3 ca Luồng 1; phát hiện giới hạn connection limit của PowerShell và nâng lên 100 kết nối để kích hoạt thành công 429. | 2,00h | [Minh chứng TC17](../../docs/evidence/week4/tc17.png); [Minh chứng TC18](../../docs/evidence/week4/tc18.png); [Minh chứng TC20](../../docs/evidence/week4/tc20.png) |
+| **A4-03** | 28/10/2026 | Thực hiện nghiệm thu Luồng 2 (Đăng ký vé & Xử lý SNS): kiểm thử validation thiếu trường 400 (TC03), sự kiện không tồn tại 404 (TC04), cơ chế bảo vệ thứ tự fail-safe không sinh vé mồ côi (TC05), và kiểm tra đăng ký vé mới với trạng thái PENDING_CONFIRMATION (TC06). | Hoàn thành 4 ca đầu của Luồng 2; kiểm chứng thành công cơ chế an toàn thứ tự S3 trước DynamoDB sau. | 1,50h | [Minh chứng TC03](../../docs/evidence/week4/tc03.png); [Minh chứng TC04](../../docs/evidence/week4/tc04.png); [Minh chứng TC05](../../docs/evidence/week4/tc05.png); [Minh chứng TC06](../../docs/evidence/week4/tc06.png) |
+| **A4-04** | 29/10/2026 | Tiếp tục nghiệm thu Luồng 2 (Phát hành vé & Bộ lọc SNS): kiểm thử đăng ký vé hợp lệ (TC01), cùng email đăng ký vé thứ hai độc lập (TC02), gửi lại vé sau khi confirm SNS (TC07), kiểm tra phân tách Filter Policy SNS (TC08), và cơ chế bền vững khi SNS lỗi (TC09). | Hoàn thành toàn bộ 9/9 ca của Luồng 2; xác nhận email vé thật nhận trong hộp thư Gmail từ AWS Notifications. | 1,50h | [Minh chứng TC01](../../docs/evidence/week4/tc01.png); [Minh chứng TC02](../../docs/evidence/week4/tc02.png); [Minh chứng TC07](../../docs/evidence/week4/tc07.png); [Minh chứng TC08](../../docs/evidence/week4/tc08.png); [Minh chứng TC09](../../docs/evidence/week4/tc09.png) |
+| **A4-05** | 30/10/2026 | Nghiệm thu Luồng 3 (Soát vé & Chống trùng HMAC): kiểm thử chặn QR sai định dạng 400 (TC16), chặn QR bị sửa chữ ký 403 (TC13), chặn QR sai sự kiện 403 (TC14), và kiểm tra vé không có trong DB 404 (TC15). | Backend phát hiện chính xác các hành vi gian lận mã QR; chữ ký HMAC-SHA256 bảo vệ toàn vẹn tuyệt đối dữ liệu vé. | 1,50h | [Minh chứng TC13](../../docs/evidence/week4/tc13.png); [Minh chứng TC14](../../docs/evidence/week4/tc14.png); [Minh chứng TC15](../../docs/evidence/week4/tc15.png); [Minh chứng TC16](../../docs/evidence/week4/tc16.png) |
+| **A4-06** | 31/10/2026 | Hoàn tất Luồng 3 & Luồng 4: kiểm thử check-in vé lần đầu (TC10), quét lại báo trùng 409 (TC11), hai thiết bị check-in đồng thời Race Condition (TC12), thống kê sự kiện (TC19) và tự động làm mới Presigned URL ảnh S3 sau khi hết hạn (TC21). | Đạt mốc **21/21 ca kiểm thử PASS 100%**; lưu trữ đầy đủ 21 ảnh chụp màn hình minh chứng trong repo. | 1,50h | [Minh chứng TC10](../../docs/evidence/week4/tc10.png); [Minh chứng TC11](../../docs/evidence/week4/tc11.png); [Minh chứng TC12](../../docs/evidence/week4/tc12.png); [Minh chứng TC19](../../docs/evidence/week4/tc19.png); [Minh chứng TC21](../../docs/evidence/week4/tc21.png) |
+| **A4-07** | 31/10/2026 | Tổng hợp và trích xuất số liệu chi phí thực tế trên Vocareum / AWS Billing: đối chiếu chi phí thực tế (0.30 USD) với định mức 50 USD; phân tích hiệu quả kinh tế của kiến trúc Serverless (không NAT Gateway, DynamoDB On-demand). | Xác nhận chi phí thực tế cực thấp: chỉ tiêu tốn 0.6% ngân sách lab được cấp (0.30$/50.00$). | 0,75h | Số dư Vocareum hiển thị: `Cloud Credits: $49.70 Remaining / $50.00 Budget`. |
+| **A4-08** | 01/11/2026 | Soạn thảo kịch bản Video Demo solo $\le$ 10 phút chi tiết theo từng mốc thời gian; chuẩn bị checklist và kịch bản dọn dẹp tài nguyên (S3, DynamoDB, Lambda, API Gateway) sau nghiệm thu. | Kịch bản video 9 phút 15 giây bao quát toàn bộ đề tài; tài liệu dọn dẹp tài nguyên sẵn sàng thực thi sau vấn đáp. | 0,75h | [Kịch bản Video Demo](../../docs/demo_script.md); [Checklist dọn dẹp](../../docs/cleanup_guide.md) |
+
+---
+
+## 3. Vai trò B — Web UI, Audio Beep, Tái lập hạ tầng & Video Demo (Trương Hoàng Long)
+
+| Mã | Ngày thực hiện | Chi tiết công việc | Kết quả và mức xác nhận cập nhật | Giờ thực tế | Ghi chú và dẫn chứng |
+| :---: | :---: | :--- | :--- | :---: | :--- |
+| **B4-01** | 26/10/2026 | Tích hợp âm thanh phản hồi (Audio Beep) vào `frontend/checkin.js` bằng Web Audio API thuần: tạo sóng âm tần số cao 880Hz (thành công) và sóng tần số trầm 330Hz (thất bại/trùng vé). | Kiểm tra phát âm thanh trên trình duyệt thành công mà không cần file MP3 hay thư viện ngoài; hỗ trợ nhân viên soát vé nhận biết tức thì kết quả. | 1,50h | Đã tối ưu `AudioContext.resume()` và `setValueAtTime` để chống ngắt âm trên Chromium. [Check-in JS](../../frontend/checkin.js) |
+| **B4-02** | 27/10/2026 | Kiểm thử giao diện web trên thiết bị di động thật: kiểm tra hiển thị responsive của 4 trang HTML, kiểm tra quyền camera HTTPS trên trình duyệt điện thoại. | Giao diện hiển thị rõ ràng trên mobile; camera quét mã QR nhạy bén dưới các điều kiện ánh sáng khác nhau. | 1,50h | [Giao diện Web](../../frontend/) |
+| **B4-03** | 28/10/2026 | Phối hợp cùng Quang kiểm thử nghiệm thu các ca SNS Email (TC06, TC07, TC08): xác nhận đăng ký email thật, bấm confirm subscription và kiểm tra tính năng gửi lại vé (`POST /resend`). | Email thông báo từ AWS Notifications đến đúng hộp thư; bộ lọc Filter Policy hoạt động chính xác giữa 2 email của nhóm. | 1,50h | [Minh chứng TC07](../../docs/evidence/week4/tc07.png); [Minh chứng TC08](../../docs/evidence/week4/tc08.png) |
+| **B4-04** | 29/10/2026 | Rà soát cấu hình CloudWatch: kiểm tra thời gian lưu log 7 ngày, kiểm tra tính chính xác của các widget trên Dashboard `eventqr-dashboard` và trạng thái hoạt động của 2 CloudWatch Alarms. | Dashboard phản ánh đầy đủ lưu lượng gọi API và thời gian thực thi; không có lỗi 5xx vượt ngưỡng cảnh báo. | 1,50h | [Minh chứng Dashboard](../../docs/evidence/week3/dashboard.png); [Minh chứng Alarms](../../docs/evidence/week3/alarm.png) |
+| **B4-05** | 30/10/2026 | Tái lập toàn bộ hạ tầng Serverless trên tài khoản dự phòng B (Long) từ mã nguồn Git để phục vụ quay Live Demo và dự phòng sự cố session lab: tạo DynamoDB, S3, Secrets Manager, Lambda, API Gateway. | Toàn bộ hệ thống chạy live thông suốt trên tài khoản B; chứng minh khả năng tái lập và tính di động của mã nguồn đồ án. | 2,00h | Sử dụng `LabRole` có sẵn; kiểm tra chéo API URL và các route hoạt động 100%. |
+| **B4-06** | 31/10/2026 | Thực hiện kiểm thử Race Condition (TC12) và Thống kê (TC19): sử dụng 2 thiết bị gửi đồng thời yêu cầu check-in để đối chiếu phản hồi 200 vs 409; kiểm tra hiển thị số liệu thống kê trên `stats.html`. | Minh chứng 2 thiết bị đặt cạnh nhau phản ánh trung thực tính atomic của DynamoDB; Dashboard hiển thị đúng số liệu vé. | 1,50h | [Minh chứng TC12](../../docs/evidence/week4/tc12.png); [Minh chứng TC19](../../docs/evidence/week4/tc19.png) |
+| **B4-07** | 01/11/2026 | Hỗ trợ chuẩn bị phòng quay, kiểm tra chất lượng âm thanh Desktop Audio và hình ảnh phục vụ quay video demo; phối hợp chạy thử kịch bản demo 9 phút cùng Quang. | Âm thanh tiếng beep 880Hz và 330Hz thu rõ nét; các bước demo diễn ra nhịp nhàng đúng thời lượng quy định $\le$ 10 phút. | 1,00h | [Kịch bản Video Demo](../../docs/demo_script.md) |
+| **B4-08** | 01/11/2026 | Rà soát toàn bộ tài nguyên đã tạo trên cả 2 tài khoản, chuẩn bị lệnh AWS CLI và các bước xóa bucket S3 (gồm cả xóa version/objects) để sẵn sàng dọn dẹp tài nguyên sau buổi vấn đáp. | Hoàn thiện tài liệu hướng dẫn dọn dẹp an toàn; đảm bảo không phát sinh chi phí ngầm sau khi kết thúc môn học. | 1,00h | [Checklist dọn dẹp](../../docs/cleanup_guide.md) |
+
+---
+
+## 4. Ghi nhận hỗ trợ AI
+
+Theo quy chế môn học về tính minh bạch khi sử dụng công cụ AI (Gemini / Claude / Codex):
+
+1. **Nội dung AI hỗ trợ:**
+   - Hỗ trợ xây dựng kế hoạch kiểm thử chi tiết 4 luồng nghiệp vụ (`test-plan.md`) và bảng ma trận 21 ca nghiệm thu (`test-matrix.md`) đối chiếu trực tiếp Mục 10 của `docs/api.md`.
+   - Hỗ trợ tối ưu mã nguồn hàm `beep()` trong `frontend/checkin.js` bằng Web Audio API thuần (thêm `AudioContext.resume()` và điều phối âm lượng `setValueAtTime`) để hoạt động ổn định trên các trình duyệt Chromium.
+   - Hỗ trợ phát hiện giới hạn connection limit của PowerShell (`DefaultConnectionLimit = 2`) và đề xuất lệnh nâng lên 100 để kích hoạt thành công mã lỗi 429 Too Many Requests (TC18).
+   - Hỗ trợ soạn thảo kịch bản Video Demo $\le$ 10 phút chi tiết từng mốc thời gian và checklist dọn dẹp tài nguyên.
+2. **Quy tắc làm việc và bảo mật:**
+   - Mọi thao tác cấu hình, deploy, quét mã QR camera và chụp ảnh minh chứng đều do sinh viên thực hiện thật trên AWS Learner Lab.
+   - Tuyệt đối không hardcode bí mật HMAC, AWS credentials hay API Key trong mã nguồn và tài liệu.

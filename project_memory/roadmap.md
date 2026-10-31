@@ -16,7 +16,7 @@
 Tuần 1 (05–11/10): Nền tảng, thiết kế & bài thử rủi ro   [100% HOÀN THÀNH]
 Tuần 2 (12–18/10): Chức năng lõi & Kiểm thử thành phần     [100% HOÀN THÀNH - SETUP & MÃ NGUỒN XONG]
 Tuần 3 (19–25/10): Tích hợp, bảo mật, giám sát            [100% HOÀN THÀNH - ĐỒNG BỘ WORKLOG & ĐÓNG BĂNG]
-Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT ĐẦU - CHUẨN BỊ KỊCH BẢN]
+Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [ĐANG THỰC HIỆN - NGHIỆM THU & TỔNG KẾT]
 ```
 
 ---
@@ -123,56 +123,56 @@ Tuần 4 (26/10–01/11): Nghiệm thu 21 ca, video demo, báo cáo [CHƯA BẮT
 
 #### Thứ Tư (21/10/2026) — Bảo mật & Throttling
 - [x] **A (Quang - 1.5h):** Cấu hình bảo mật API: Tạo API Key `eventqr-organizer-key`, Usage Plan gắn throttling (Rate: 50, Burst: 100), khóa bảo vệ route `/events`, `/checkin`, `/stats`.
-- [ ] **B (Long - 2.0h):** Tích hợp quét camera trên điện thoại thật qua HTTPS của hệ thống chính; kiểm thử truyền API Key trong header `x-api-key`. [ĐANG THỰC HIỆN]
+- [x] **B (Long - 2.0h):** Tích hợp quét camera trên điện thoại thật qua HTTPS của hệ thống chính; kiểm thử truyền API Key trong header `x-api-key`.
 
 #### Thứ Năm (22/10/2026) — Kiểm thử tích hợp luồng đầu - cuối (End-to-End)
-- [ ] **A (Quang - 1.5h):** Kiểm tra dữ liệu ghi nhận trong DynamoDB và Secrets Manager khi luồng đăng ký -> gửi email -> check-in chạy thật.
-- [ ] **B (Long - 2.0h):** Thiết lập CloudWatch: Đổi retention 7 ngày, tạo dashboard `eventqr-dashboard` giám sát invocations/lỗi Lambda, tạo 2 CloudWatch Alarms cảnh báo lỗi 5xx. [ĐANG THỰC HIỆN]
+- [x] **A (Quang - 1.5h):** Kiểm tra dữ liệu ghi nhận trong DynamoDB và Secrets Manager khi luồng đăng ký -> gửi email -> check-in chạy thật.
+- [x] **B (Long - 2.0h):** Thiết lập CloudWatch: Đổi retention 7 ngày, tạo dashboard `eventqr-dashboard` giám sát invocations/lỗi Lambda, tạo 2 CloudWatch Alarms cảnh báo lỗi 5xx.
 
 #### Thứ Sáu (23/10/2026) — Rà soát phi chức năng & IaC
-- [ ] **A (Quang - 1.5h):** Kiểm tra giới hạn reserved concurrency của Lambda, rà soát tránh lỗi retry vô tận gây cạn kinh phí 50 USD.
-- [ ] **B (Long - 1.5h):** Soạn thảo template IaC (SAM/CloudFormation) nếu kịp; nếu không kịp thì viết tài liệu quy trình thao tác tay.
+- [x] **A (Quang - 1.5h):** Kiểm tra giới hạn reserved concurrency của Lambda, rà soát tránh lỗi retry vô tận gây cạn kinh phí 50 USD.
+- [x] **B (Long - 1.5h):** Soạn thảo template IaC (SAM/CloudFormation) nếu kịp; nếu không kịp thì viết tài liệu quy trình thao tác tay.
 
 #### Thứ Bảy (24/10/2026) — Hoàn thiện UX & Xử lý ngoại lệ
-- [ ] **A (Quang - 1.5h):** Xử lý triệt để mã lỗi CORS từ Gateway Responses (lỗi 403 khi sai API key, lỗi 429 khi quá tải).
-- [ ] **B (Long - 1.5h):** Tinh chỉnh thông báo lỗi trên UI: hiển thị rõ vé đã check-in lúc mấy giờ, âm thanh quét thành công/thất bại.
+- [x] **A (Quang - 1.5h):** Xử lý triệt để mã lỗi CORS từ Gateway Responses (lỗi 403 khi sai API key, lỗi 429 khi quá tải).
+- [x] **B (Long - 1.5h):** Tinh chỉnh thông báo lỗi trên UI: hiển thị rõ vé đã check-in lúc mấy giờ, âm thanh quét thành công/thất bại.
 
 #### Chủ Nhật (25/10/2026) — Giải thích chéo, Báo cáo Tuần 3 & ĐÓNG BĂNG MÃ NGUỒN
-- [ ] **A (Quang - 1.5h):** Giải thích chéo cho Long. Chụp minh chứng tài khoản chính. Viết báo cáo tuần 3. **CHỐT ĐÓNG BĂNG TÍNH NĂNG (FEATURE FREEZE).**
-- [ ] **B (Long - 1.5h):** Giải thích chéo cho Quang. Hoàn tất tài liệu vận hành. Viết báo cáo tuần 3.
+- [x] **A (Quang - 1.5h):** Giải thích chéo cho Long. Chụp minh chứng tài khoản chính. Viết báo cáo tuần 3. **CHỐT ĐÓNG BĂNG TÍNH NĂNG (FEATURE FREEZE).**
+- [x] **B (Long - 1.5h):** Giải thích chéo cho Quang. Hoàn tất tài liệu vận hành. Viết báo cáo tuần 3.
 
 **Mục tiêu giờ Tuần 3:** Quang: 11.5h | Long: 12.0h (Đạt chuẩn $\ge 8$h).
 
 ---
 
 ## TUẦN 4: NGHIỆM THU 21 CA, VIDEO DEMO, BÁO CÁO TỔNG KẾT & DỌN DẸP (26/10 – 01/11/2026)
-*Trạng thái: Chưa bắt đầu. Mục tiêu: Nghiệm thu toàn bộ hệ thống, quay video $\le 10$ phút, hoàn thiện báo cáo và dọn dẹp tài nguyên.*
+*Trạng thái: Đang thực hiện. Mục tiêu: Nghiệm thu toàn bộ hệ thống, quay video $\le 10$ phút, hoàn thiện báo cáo và dọn dẹp tài nguyên.*
 
 ### Phân công theo ngày:
 
 #### Thứ Hai (26/10/2026) — Nghiệm thu 21 ca kiểm thử (Test Cases 1–11)
-- [ ] **A (Quang - 2.0h):** Chạy nghiệm thu các ca backend: vé hợp lệ, quét trùng đồng thời 2 thiết bị, QR bị sửa signature, QR sai eventId, vé không tồn tại.
-- [ ] **B (Long - 2.0h):** Chạy nghiệm thu các ca frontend & SNS: đăng ký email mới, email chưa confirm SNS, resend vé, quét trong điều kiện camera mờ.
+- [x] **A (Quang - 2.0h):** Chạy nghiệm thu các ca backend: vé hợp lệ, quét trùng đồng thời 2 thiết bị, QR bị sửa signature, QR sai eventId, vé không tồn tại.
+- [x] **B (Long - 2.0h):** Chạy nghiệm thu các ca frontend & SNS: đăng ký email mới, email chưa confirm SNS, resend vé, quét trong điều kiện camera mờ.
 
 #### Thứ Ba (27/10/2026) — Nghiệm thu 21 ca kiểm thử (Test Cases 12–21) & Kịch bản Demo
-- [ ] **A (Quang - 1.5h):** Hoàn thiện bảng kết quả nghiệm thu 21 test cases (ghi rõ Pass/Fail, thời gian, response). Tối ưu chi phí Lambda.
-- [ ] **B (Long - 1.5h):** Soạn thảo kịch bản chi tiết cho Video Demo ($\le 10$ phút) theo đúng yêu cầu giảng viên.
+- [x] **A (Quang - 1.5h):** Hoàn thiện bảng kết quả nghiệm thu 21 test cases (ghi rõ Pass/Fail, thời gian, response). Tối ưu chi phí Lambda.
+- [x] **B (Long - 1.5h):** Soạn thảo kịch bản chi tiết cho Video Demo ($\le 10$ phút) theo đúng yêu cầu giảng viên.
 
 #### Thứ Tư (28/10/2026) — Dữ liệu mẫu & Tổng hợp đóng góp AI
-- [ ] **A (Quang - 1.5h):** Chuẩn bị dữ liệu mẫu sạch trên tài khoản chính: 1 sự kiện chuẩn, chuẩn bị sẵn 5–10 email sinh viên thật để demo. Tổng hợp phần đóng góp của AI trong toàn dự án.
-- [ ] **B (Long - 1.5h):** Tổng duyệt kịch bản video demo cùng Quang; test âm thanh, ánh sáng, góc quay camera quét vé trên điện thoại.
+- [x] **A (Quang - 1.5h):** Chuẩn bị dữ liệu mẫu sạch trên tài khoản chính: 1 sự kiện chuẩn, chuẩn bị sẵn 5–10 email sinh viên thật để demo. Tổng hợp phần đóng góp của AI trong toàn dự án.
+- [x] **B (Long - 1.5h):** Tổng duyệt kịch bản video demo cùng Quang; test âm thanh, ánh sáng, góc quay camera quét vé trên điện thoại.
 
 #### Thứ Năm (29/10/2026) — Quay và Dựng Video Demo
-- [ ] **A (Quang - 2.0h):** Phối hợp quay video demo chính thức: thao tác tạo sự kiện, đăng ký, nhận vé, quét QR bằng điện thoại, xem dashboard thống kê. Soạn Báo cáo cuối kỳ.
-- [ ] **B (Long - 2.0h):** Hậu kỳ video demo: cắt ghép, bổ sung chú thích các bước kỹ thuật, kiểm soát thời lượng $\le 10$ phút, xuất bản link dự phòng.
+- [x] **A (Quang - 2.0h):** Phối hợp quay video demo chính thức: thao tác tạo sự kiện, đăng ký, nhận vé, quét QR bằng điện thoại, xem dashboard thống kê. Soạn Báo cáo cuối kỳ.
+- [x] **B (Long - 2.0h):** Hậu kỳ video demo: cắt ghép, bổ sung chú thích các bước kỹ thuật, kiểm soát thời lượng $\le 10$ phút, xuất bản link dự phòng.
 
 #### Thứ Sáu (30/10/2026) — Báo cáo Chi phí & Hoàn thiện tài liệu
-- [ ] **A (Quang - 1.5h):** Chụp ảnh AWS Cost Explorer / Billing của tài khoản chính; phân tích chi phí tiêu thụ so với hạn mức 50 USD; hoàn thiện chương Kiến trúc & Bảo mật trong Báo cáo cuối kỳ.
-- [ ] **B (Long - 1.5h):** Hoàn thiện chương Frontend, SNS, Giám sát trong Báo cáo cuối kỳ; tổng hợp bảng phân bổ công việc và tự đánh giá thành viên.
+- [x] **A (Quang - 1.5h):** Chụp ảnh AWS Cost Explorer / Billing của tài khoản chính; phân tích chi phí tiêu thụ so với hạn mức 50 USD; hoàn thiện chương Kiến trúc & Bảo mật trong Báo cáo cuối kỳ.
+- [x] **B (Long - 1.5h):** Hoàn thiện chương Frontend, SNS, Giám sát trong Báo cáo cuối kỳ; tổng hợp bảng phân bổ công việc và tự đánh giá thành viên.
 
 #### Thứ Bảy (31/10/2026) — Kiểm tra chéo toàn diện (Final Review)
-- [ ] **A (Quang - 1.5h):** Rà soát toàn bộ hồ sơ nộp môn học: Báo cáo cuối kỳ (PDF), Video demo link, Bảng nghiệm thu, Worklog 4 tuần.
-- [ ] **B (Long - 1.5h):** Kiểm tra chéo link GitHub, đảm bảo repo không chứa thông tin nhạy cảm, README đầy đủ thông tin nhóm và hướng dẫn.
+- [x] **A (Quang - 1.5h):** Rà soát toàn bộ hồ sơ nộp môn học: Báo cáo cuối kỳ (PDF), Video demo link, Bảng nghiệm thu, Worklog 4 tuần.
+- [x] **B (Long - 1.5h):** Kiểm tra chéo link GitHub, đảm bảo repo không chứa thông tin nhạy cảm, README đầy đủ thông tin nhóm và hướng dẫn.
 
 #### Chủ Nhật (01/11/2026) — DỌN DẸP TÀI NGUYÊN (CLEANUP)
 - [ ] **A (Quang - 1.0h):** **Chỉ sau khi đã có đầy đủ video và minh chứng:** Xóa toàn bộ tài nguyên trên tài khoản chính (DynamoDB, S3, Lambda, Secrets Manager, API Gateway). Chụp ảnh console trống làm minh chứng.

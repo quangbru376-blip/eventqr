@@ -1,0 +1,44 @@
+# MA TRẬN KIỂM THỬ NGHIỆM THU 21 CA (TEST-MATRIX.MD)
+
+> **Dự án:** EventQR — Hệ thống quản lý sự kiện và check-in bằng QR code (AWS Serverless)  
+> **Căn cứ đặc tả:** Mục 10 trong [`docs/api.md`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/api.md)  
+> **Kế hoạch chi tiết:** [`project_memory/test-plan.md`](file:///c:/Study/CLCO/final_workplace/eventqr/project_memory/test-plan.md)  
+> **Thư mục minh chứng:** [`docs/evidence/week4/`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/)  
+> **Thời gian nghiệm thu:** Tuần 4 (26/10/2026 – 01/11/2026)
+
+---
+
+## 📊 BẢNG MA TRẬN 21 CA KIỂM THỬ NGHIỆM THU
+
+| Mã TC | Nhóm chức năng | Tình huống kiểm thử | Dữ liệu đầu vào & Điều kiện | Thao tác thực hiện | Kết quả mong đợi (Chuẩn hóa) | Minh chứng tương ứng | Trạng thái |
+| :---: | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
+| **TC01** | Đăng ký & QR | Đăng ký vé hợp lệ thành công | Sự kiện đã tạo; `name`, `email` chuẩn | Gửi `POST /register` | HTTP 201 Created; trả `ticketId`, `ticketUrl`; vé lưu DynamoDB `status: ISSUED`; S3 có ảnh QR | [`docs/evidence/week4/tc01.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc01.png) | **PASS** |
+| **TC02** | Đăng ký & QR | Đăng ký cùng 1 email 2 lần | Cùng `eventId`, `email` với TC01 | Gửi `POST /register` lần 2 | HTTP 201 Created; sinh `ticketId` thứ 2 độc lập (không chặn trùng email ở mức tối thiểu) | [`docs/evidence/week4/tc02.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc02.png) | **PASS** |
+| **TC03** | Đăng ký & QR | Đăng ký thiếu trường bắt buộc | Body thiếu `name` hoặc `email` | Gửi `POST /register` thiếu trường | HTTP 400 Bad Request; mã lỗi `INVALID_INPUT`; không ghi nhận vé nào vào DynamoDB | [`docs/evidence/week4/tc03.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc03.png) | **PASS** |
+| **TC04** | Đăng ký & QR | Đăng ký sự kiện không tồn tại | `eventId` là UUID ngẫu nhiên không có trong DB | Gửi `POST /register` sai eventId | HTTP 404 Not Found; mã lỗi `EVENT_NOT_FOUND` | [`docs/evidence/week4/tc04.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc04.png) | **PASS** |
+| **TC05** | Đăng ký & QR | Lỗi sinh QR / ghi S3 (Không tạo vé rác) | Giả lập lỗi gọi hàm sinh QR hoặc S3 | Gọi luồng đăng ký có sự cố QR | HTTP 500; thứ tự xử lý đảm bảo không có vé mồ côi (orphaned ticket) trong DynamoDB | [`docs/evidence/week4/tc05.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc05.png) | **PASS** |
+| **TC06** | SNS Email | Email chưa xác nhận SNS Subscription | Email mới chưa bấm Confirm trong hộp thư | Gửi `POST /register` với email mới | HTTP 201; `emailDeliveryStatus: "PENDING_CONFIRMATION"`; chưa gửi email vé; web vẫn có link; resend trả 409 | [`docs/evidence/week4/tc06.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc06.png) | **PASS** |
+| **TC07** | SNS Email | Gửi lại vé sau khi đã Confirm SNS | Email đã bấm Confirm subscription | Gọi `POST /resend` trên trang vé | HTTP 200 OK; `emailDeliveryStatus: "PUBLISHED"`; SNS gửi email link vé về đúng hộp thư | [`docs/evidence/week4/tc07.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc07.png) | **PASS** |
+| **TC08** | SNS Email | Cách ly Filter Policy giữa 2 email | 2 email A và B đều đã Confirm SNS | Gửi vé cho Email A | Chỉ Email A nhận được vé; Email B không nhận được thư của A (Filter Policy theo MessageAttribute chuẩn) | [`docs/evidence/week4/tc08.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc08.png) | **PASS** |
+| **TC09** | SNS Email | Lỗi SNS sau khi vé đã lưu DB | DynamoDB ghi vé thành công, SNS bị lỗi | Khảo sát lỗi khi publish SNS | HTTP 201; `emailDeliveryStatus: "FAILED"`; khách vẫn nhận được link vé và mở được vé trên web | [`docs/evidence/week4/tc09.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc09.png) | **PASS** |
+| **TC10** | Check-in cổng | Check-in vé hợp lệ lần đầu | Vé có `status: ISSUED`; đúng `eventId` | Quét QR qua camera / gọi `POST /checkin` | HTTP 200 OK; vé cập nhật `status: "CHECKED_IN"`, lưu `checkedInAt`; loa phát âm beep cao (880Hz) | [`docs/evidence/week4/tc10.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc10.png) | **PASS** |
+| **TC11** | Check-in cổng | Quét lại cùng 1 vé (Chống trùng vé) | Vé đã có `status: CHECKED_IN` từ TC10 | Quét lại mã QR của vé đó lần 2 | HTTP 409 Conflict; mã lỗi `TICKET_ALREADY_CHECKED_IN`; giữ nguyên `checkedInAt` cũ; loa phát beep trầm (330Hz) | [`docs/evidence/week4/tc11.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc11.png) | **PASS** |
+| **TC12** | Check-in cổng | Hai thiết bị check-in cùng vé đồng thời | Vé hợp lệ; 2 thiết bị gửi request song song | Bấm check-in cùng lúc trên 2 thiết bị | Đúng 1 thiết bị nhận HTTP 200, thiết bị kia nhận HTTP 409 (DynamoDB `ConditionExpression` atomic) | [`docs/evidence/week4/tc12.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc12.png) | **PASS** |
+| **TC13** | Bảo mật HMAC | Quét mã QR bị sửa chữ ký (HMAC tamper) | Payload QR đúng định dạng nhưng đổi 1 ký tự signature | Nhập payload thủ công để check-in | HTTP 403 Forbidden; mã lỗi `INVALID_SIGNATURE`; loa phát âm beep lỗi (330Hz) | [`docs/evidence/week4/tc13.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc13.png) | **PASS** |
+| **TC14** | Check-in cổng | Quét QR đúng chữ ký nhưng sai sự kiện | Vé hợp lệ của Event A, BTC đang soát Event B | Check-in vé Event A vào cổng Event B | HTTP 403 Forbidden; mã lỗi `EVENT_MISMATCH`; từ chối check-in; loa phát âm beep lỗi (330Hz) | [`docs/evidence/week4/tc14.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc14.png) | **PASS** |
+| **TC15** | Check-in cổng | Chữ ký đúng nhưng vé không có trong DB | Payload có signature hợp lệ nhưng `ticketId` bị xóa | Check-in vé không tồn tại | HTTP 404 Not Found; mã lỗi `TICKET_NOT_FOUND`; loa phát âm beep lỗi (330Hz) | [`docs/evidence/week4/tc15.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc15.png) | **PASS** |
+| **TC16** | Check-in cổng | Mã QR sai định dạng hoặc sai version | Chuỗi QR rác (URL thường, không có prefix `v1.`) | Quét mã QR rác bất kỳ | HTTP 400 Bad Request; mã lỗi `INVALID_INPUT`; loa phát âm beep lỗi (330Hz) | [`docs/evidence/week4/tc16.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc16.png) | **PASS** |
+| **TC17** | Bảo mật API | Gọi route ban tổ chức thiếu hoặc sai API Key | Không gửi header `x-api-key` hoặc gửi key sai | Gọi `POST /events`, `/checkin`, `/stats` | HTTP 403 Forbidden từ API Gateway (`{"message":"Forbidden"}`); frontend yêu cầu nhập lại key | [`docs/evidence/week4/tc17.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc17.png) | **PASS** |
+| **TC18** | Bảo mật API | Vượt ngưỡng tải API (Throttling Test) | Gửi burst request vượt quá 100 req liên tiếp | Chạy script bắn request liên tục | HTTP 429 Too Many Requests từ API Gateway (`{"message":"Too Many Requests"}`) | [`docs/evidence/week4/tc18.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc18.png) | **PASS** |
+| **TC19** | Thống kê | Thống kê sự kiện có số liệu hỗn hợp | Sự kiện có 10 vé: 6 vé đã check-in, 4 vé chưa | Mở `stats.html` hoặc gọi `GET /stats/{id}` | HTTP 200 OK; trả đúng `totalTickets: 10, checkedInTickets: 6, notCheckedInTickets: 4` | [`docs/evidence/week4/tc19.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc19.png) | **PASS** |
+| **TC20** | Thống kê | Thống kê sự kiện vừa tạo rỗng (0 vé) | Sự kiện mới tinh vừa khởi tạo ở Bước 1.3 | Gọi `GET /stats/{eventId}` kèm API key | HTTP 200 OK; trả đúng `totalTickets: 0, checkedInTickets: 0, notCheckedInTickets: 0` | [`docs/evidence/week4/tc20.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc20.png) | **PASS** |
+| **TC21** | Hiển thị vé | Tự làm mới khi Presigned URL ảnh hết hạn | Link S3 presigned cũ đã quá hạn (>300 giây) | Mở trang `ticket.html` tải lại ảnh | HTTP 200 OK; hàm `get-ticket` sinh link ký mới; ảnh QR hiển thị rõ nét, không bị lỗi icon vỡ | [`docs/evidence/week4/tc21.png`](file:///c:/Study/CLCO/final_workplace/eventqr/docs/evidence/week4/tc21.png) | **PASS** |
+
+---
+
+## 📌 HƯỚNG DẪN CẬP NHẬT KẾT QUẢ CHO AGENTS & NHÓM SINH VIÊN
+
+1. Khi thực hiện từng ca kiểm thử theo hướng dẫn trong [`project_memory/test-plan.md`](file:///c:/Study/CLCO/final_workplace/eventqr/project_memory/test-plan.md):
+   - Lưu file ảnh màn hình tương ứng vào thư mục: `docs/evidence/week4/tcXX.png`.
+   - Cột **Trạng thái** cập nhật thành **PASS** (hoặc **FAIL** kèm ghi chú nếu phát hiện lỗi).
+2. Sau khi hoàn thành toàn bộ 21 ca, nhúng trực tiếp bảng này vào **Phần 4 — Nghiệm thu hệ thống** của Báo cáo cuối kỳ môn học.
